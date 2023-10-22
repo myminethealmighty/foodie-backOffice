@@ -1,4 +1,5 @@
-import { config } from "@/utils/config";
+import { useAppDispatch, useAppSelector } from "@/store/hook";
+import { fetchAppData } from "@/store/slices/appSlice";
 import { Box } from "@mui/material";
 import { useSession } from "next-auth/react";
 import { ReactNode, useEffect } from "react";
@@ -11,15 +12,20 @@ interface Props {
 
 const Layout = ({ children }: Props) => {
   const { data: session } = useSession();
+  const dispatch = useAppDispatch();
+  const { init } = useAppSelector((state) => state.app);
+
   useEffect(() => {
-    fetchData();
+    if (session && !init) {
+      dispatch(fetchAppData({}));
+    }
   }, [session]);
 
-  const fetchData = async () => {
-    const response = await fetch(`${config.apiBaseUrl}/app`);
-    const dataFromServer = await response.json();
-    console.log(dataFromServer);
-  };
+  // const fetchData = async () => {
+  //   const response = await fetch(`${config.apiBaseUrl}/app`);
+  //   const dataFromServer = await response.json();
+  //   console.log(dataFromServer);
+  // };
 
   return (
     <Box>

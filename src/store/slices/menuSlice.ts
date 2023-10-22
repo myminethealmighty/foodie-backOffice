@@ -1,4 +1,5 @@
 import { GetMenusOptions, MenuSlice } from "@/types/menu";
+import { config } from "@/utils/config";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 const initialState: MenuSlice = {

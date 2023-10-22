@@ -1,5 +1,31 @@
-const LocationsPage = () => {
-  return <h1>Locations Page</h1>;
+import NewLocation from "@/components/NewLocation";
+import { useAppSelector } from "@/store/hook";
+import { Box, Button, Typography } from "@mui/material";
+import { useState } from "react";
+
+const LocationPage = () => {
+  const [open, setOpen] = useState(false);
+  const locations = useAppSelector((state) => state.location.items);
+  return (
+    <Box>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "flex-end",
+        }}
+      >
+        <Button variant="contained" onClick={() => setOpen(true)}>
+          + New
+        </Button>
+      </Box>
+      <Box>
+        {locations.map((item) => (
+          <Typography key={item.id}>{item.name}</Typography>
+        ))}
+      </Box>
+      <NewLocation open={open} setOpen={setOpen} />
+    </Box>
+  );
 };
 
-export default LocationsPage;
+export default LocationPage;

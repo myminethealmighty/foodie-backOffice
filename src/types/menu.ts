@@ -1,5 +1,7 @@
+import { Menu } from "@prisma/client";
+
 export interface MenuSlice {
-  items: [];
+  items: Menu[];
   isLoading: boolean;
   error: Error | null;
 }
