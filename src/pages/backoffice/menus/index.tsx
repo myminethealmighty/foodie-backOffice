@@ -1,6 +1,8 @@
+import ItemCard from "@/components/ItemCard";
 import NewMenu from "@/components/NewMenu";
 import { useAppSelector } from "@/store/hook";
-import { Box, Button, Typography } from "@mui/material";
+import LocalDiningIcon from "@mui/icons-material/LocalDining";
+import { Box, Button } from "@mui/material";
 import { useState } from "react";
 
 const MenuPage = () => {
@@ -18,9 +20,14 @@ const MenuPage = () => {
           + New
         </Button>
       </Box>
-      <Box>
+      <Box sx={{ display: "flex", flexWrap: "wrap" }}>
         {menus.map((item) => (
-          <Typography key={item.id}>{item.name}</Typography>
+          <ItemCard
+            href={`/backoffice/menus/${item.id}`}
+            key={item.id}
+            title={item.name}
+            icon={<LocalDiningIcon />}
+          />
         ))}
       </Box>
       <NewMenu open={open} setOpen={setOpen} />
