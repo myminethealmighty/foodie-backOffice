@@ -20,3 +20,14 @@ export interface CreateMenusOptions extends BaseOptions {
   price: number;
   menuCategoryIds: number[];
 }
+
+export interface UpdateMenusOptions extends BaseOptions {
+  id: number;
+  name?: string;
+  price?: number;
+  menuCategoryIds: number[];
+}
+
+export interface DeleteMenusOptions extends BaseOptions {
+  id: number;
+}
