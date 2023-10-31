@@ -1,14 +1,10 @@
 import { Menu } from "@prisma/client";
+import { BaseOptions } from "./app";
 
 export interface MenuSlice {
   items: Menu[];
   isLoading: boolean;
   error: Error | null;
-}
-
-export interface BaseOptions {
-  onSuccess?: (data?: any) => void;
-  onError?: (data?: any) => void;
 }
 
 export interface GetMenusOptions extends BaseOptions {

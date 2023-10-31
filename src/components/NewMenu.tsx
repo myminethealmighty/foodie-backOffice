@@ -47,7 +47,6 @@ const NewMenu = ({ open, setOpen }: Props) => {
 
   const handleRemoveCategory = (id: number) => {
     const updatedIds = newMenu.menuCategoryIds.filter((item) => item !== id);
-    //setSelectedMenuCategoryIds(updatedIds);
     setNewMenu({ ...newMenu, menuCategoryIds: updatedIds });
   };
   // const handleCreateMenu = () => {

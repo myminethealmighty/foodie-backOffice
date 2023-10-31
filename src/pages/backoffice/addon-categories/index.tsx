@@ -1,11 +1,14 @@
+import ItemCard from "@/components/ItemCard";
 import NewAddonCategory from "@/components/NewAddonCategory";
 import { useAppSelector } from "@/store/hook";
-import { Box, Button, Typography } from "@mui/material";
+import ClassIcon from "@mui/icons-material/Class";
+import { Box, Button } from "@mui/material";
 import { useState } from "react";
 
 const AddonCategoryPage = () => {
   const [open, setOpen] = useState(false);
   const addonCategories = useAppSelector((state) => state.addonCategory.items);
+  console.log(addonCategories);
   return (
     <Box>
       <Box
@@ -18,9 +21,14 @@ const AddonCategoryPage = () => {
           + New
         </Button>
       </Box>
-      <Box>
+      <Box sx={{ display: "flex", flexWrap: "wrap" }}>
         {addonCategories.map((item) => (
-          <Typography key={item.id}>{item.name}</Typography>
+          <ItemCard
+            href={`/backoffice/addon-categories/${item.id}`}
+            key={item.id}
+            title={item.name}
+            icon={<ClassIcon />}
+          />
         ))}
       </Box>
       <NewAddonCategory open={open} setOpen={setOpen} />

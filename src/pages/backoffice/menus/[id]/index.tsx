@@ -1,5 +1,5 @@
 import { useAppDispatch, useAppSelector } from "@/store/hook";
-import { updateMenus } from "@/store/slices/menuSlice";
+import { deleteMenus, updateMenus } from "@/store/slices/menuSlice";
 import { UpdateMenusOptions } from "@/types/menu";
 import {
   Box,
@@ -57,6 +57,15 @@ const MenuDetail = () => {
   const handleRemoveCategory = (id: number) => {
     const updatedIds = data.menuCategoryIds.filter((item) => item !== id);
     setData({ ...data, menuCategoryIds: updatedIds });
+  };
+
+  const handleDeleteMenu = () => {
+    dispatch(
+      deleteMenus({
+        id: menuId,
+        onSuccess: () => router.push("/backoffice/menus"),
+      })
+    );
   };
 
   const handleUpdateMenu = () => {
@@ -138,7 +147,9 @@ const MenuDetail = () => {
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setOpen(false)}>Cancel</Button>
-          <Button variant="contained">Confirm</Button>
+          <Button variant="contained" onClick={handleDeleteMenu}>
+            Confirm
+          </Button>
         </DialogActions>
       </Dialog>
     </Box>

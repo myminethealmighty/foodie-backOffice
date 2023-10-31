@@ -121,12 +121,12 @@ export default async function handler(
       });
       const menuIds = menuCategoryMenus.map((item) => item.menuId);
       const menus = await prisma.menu.findMany({
-        where: { id: { in: menuIds } },
+        where: { id: { in: menuIds }, isArchived: false },
       });
-      const menuAddonCategory = await prisma.menuAddonCategory.findMany({
+      const menuAddonCategories = await prisma.menuAddonCategory.findMany({
         where: { menuId: { in: menuIds } },
       });
-      const addonCategoryIds = menuAddonCategory.map(
+      const addonCategoryIds = menuAddonCategories.map(
         (item) => item.addonCategoryId
       );
       const addonCategories = await prisma.addonCategory.findMany({
@@ -143,6 +143,7 @@ export default async function handler(
         menus,
         addonCategories,
         addons,
+        menuAddonCategories,
         menuCategoryMenus,
         menuCategories,
         tables,
