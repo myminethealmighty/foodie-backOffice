@@ -40,9 +40,8 @@ const NewMenu = ({ open, setOpen }: Props) => {
   };
 
   const handleOnChange = (evt: SelectChangeEvent<number[]>) => {
-    const selectedIds = evt.target.value as number[];
-    //setSelectedMenuCategoryIds(selectedIds);
-    setNewMenu({ ...newMenu, menuCategoryIds: selectedIds });
+    const selectedId = evt.target.value as number[];
+    setNewMenu({ ...newMenu, menuCategoryIds: selectedId });
   };
 
   const handleRemoveCategory = (id: number) => {

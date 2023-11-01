@@ -35,6 +35,43 @@ export default async function handler(
       )
     );
     return res.status(200).send({ addonCategory, menuAddonCategories });
+  } else if (method === "DELETE") {
+    const addonCategoryId = Number(req.query.id);
+    const addonCategory = await prisma.addonCategory.findFirst({
+      where: { id: addonCategoryId },
+    });
+    if (!addonCategory) return res.status(400).send("Bad request.");
+    await prisma.addonCategory.update({
+      data: { isArchived: true },
+      where: { id: addonCategoryId },
+    });
+    return res.status(200).send("Deleted.");
+  } else if (method === "PUT") {
+    const { id, name, isRequired, menuIds } = req.body;
+    const isValid =
+      id && name && isRequired !== undefined && menuIds.length > 0;
+    if (!isValid) return res.status(400).send("Bad request.");
+    const addonCategory = await prisma.addonCategory.update({
+      data: { name, isRequired },
+      where: { id },
+    });
+    // update menuAddonCategory  table
+    await prisma.menuAddonCategory.deleteMany({
+      where: { addonCategoryId: id },
+    });
+    const menuAddonCategoryData: { addonCategoryId: number; menuId: number }[] =
+      menuIds.map((item: number) => ({
+        addonCategoryId: id,
+        menuId: item,
+      }));
+    const menuAddonCategories = await prisma.$transaction(
+      menuAddonCategoryData.map((item) =>
+        prisma.menuAddonCategory.create({
+          data: { addonCategoryId: item.addonCategoryId, menuId: item.menuId },
+        })
+      )
+    );
+    return res.status(200).json({ addonCategory, menuAddonCategories });
   }
   res.status(405).send("Method Not Allowed");
 }

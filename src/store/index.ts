@@ -7,7 +7,9 @@ import menuAddonCategoryReducer from "./slices/menuAddonCategorySlice";
 import menuCategoryMenuReducer from "./slices/menuCategoryMenuSlice";
 import menuCategoryReducer from "./slices/menuCategorySlice";
 import menuReducer from "./slices/menuSlice";
+import snackbarReducer from "./slices/snackbarSlice";
 import tableReducer from "./slices/tableSlice";
+
 export const store = configureStore({
   reducer: {
     app: appReducer,
@@ -19,6 +21,7 @@ export const store = configureStore({
     menuAddonCategory: menuAddonCategoryReducer,
     location: locationReducer,
     table: tableReducer,
+    snackbar: snackbarReducer,
   },
 });
 

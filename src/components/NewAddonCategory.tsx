@@ -1,5 +1,6 @@
 import { useAppDispatch, useAppSelector } from "@/store/hook";
 import { createAddonCategory } from "@/store/slices/addonCategorySlice";
+import { setOpenSnackbar } from "@/store/slices/snackbarSlice";
 import { CreateAddonCategoryOptions } from "@/types/addonCategory";
 import {
   Box,
@@ -46,13 +47,47 @@ const NewAddonCategory = ({ open, setOpen }: Props) => {
   const handleCreateAddonCategory = () => {
     const isValid =
       newAddonCategory.name && newAddonCategory.menuIds.length > 0;
-    if (!isValid) return;
+    if (!isValid) {
+      return dispatch(
+        setOpenSnackbar({
+          message: "Missing Required Fields.",
+          severity: "error",
+        })
+      );
+    }
     dispatch(
       createAddonCategory({
         ...newAddonCategory,
-        onSuccess: () => setOpen(false),
+        onSuccess: () => {
+          dispatch(
+            setOpenSnackbar({ message: "Addon Category Created Successfully." })
+          ),
+            setOpen(false);
+        },
       })
     );
+
+    // if (!isValid) {
+    //   return dispatch(
+    //     setOpenSnackbar({
+    //       message: "Missing required fields",
+    //       severity: "error",
+    //     })
+    //   );
+    // }
+    // dispatch(
+    //   createAddonCategory(
+    //     newAddonCategory
+    // onSuccess: () => {
+    //   setOpen(false);
+    //   dispatch(
+    //     setOpenSnackbar({
+    //       message: "New addon category created successfully.",
+    //     })
+    //   );
+    //     // },
+    //   )
+    // );
   };
 
   const handleRemoveCategory = (id: number) => {

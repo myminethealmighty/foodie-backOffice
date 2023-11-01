@@ -1,36 +1,24 @@
-import { SnackbarSlice } from "@/types/snackbar";
-import { createSlice } from "@reduxjs/toolkit";
+import { useAppDispatch, useAppSelector } from "@/store/hook";
+import { resetSnackbar } from "@/store/slices/snackbarSlice";
+import { Alert, Snackbar as MuiSnackBar } from "@mui/material";
 
-const initialState: SnackbarSlice = {
-  open: false,
-  message: null,
-  autoHideDuration: 5000,
-  severity: "success",
+const Snackbar = () => {
+  const { open, severity, message, autoHideDuration } = useAppSelector(
+    (state) => state.snackbar
+  );
+  const dispatch = useAppDispatch();
+  setTimeout(() => dispatch(resetSnackbar()), autoHideDuration);
+  return (
+    <MuiSnackBar
+      open={open}
+      autoHideDuration={3000}
+      anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+    >
+      <Alert severity={severity} sx={{ width: "100%" }}>
+        {message}
+      </Alert>
+    </MuiSnackBar>
+  );
 };
 
-const snackbarSlice = createSlice({
-  name: "snackbar",
-  initialState,
-  reducers: {
-    setOpenSnackbar: (state, action) => {
-      const {
-        autoHideDuration = 5000,
-        message,
-        severity = "success",
-      } = action.payload;
-      state.open = true;
-      state.message = message;
-      state.autoHideDuration = autoHideDuration;
-      state.severity = severity;
-    },
-    resetSnackbar: (state) => {
-      state.open = false;
-      state.autoHideDuration = 5000;
-      state.severity = "success";
-      state.message = null;
-    },
-  },
-});
-
-export const { setOpenSnackbar, resetSnackbar } = snackbarSlice.actions;
-export default snackbarSlice.reducer;
+export default Snackbar;

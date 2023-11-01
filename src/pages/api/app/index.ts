@@ -130,10 +130,10 @@ export default async function handler(
         (item) => item.addonCategoryId
       );
       const addonCategories = await prisma.addonCategory.findMany({
-        where: { id: { in: addonCategoryIds } },
+        where: { id: { in: addonCategoryIds }, isArchived: false },
       });
       const addons = await prisma.addon.findMany({
-        where: { addonCategoryId: { in: addonCategoryIds } },
+        where: { addonCategoryId: { in: addonCategoryIds }, isArchived: false },
       });
       const tables = await prisma.table.findMany({
         where: { locationId: { in: locationIds } },
