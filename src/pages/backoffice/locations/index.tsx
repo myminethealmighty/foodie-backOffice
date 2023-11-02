@@ -22,7 +22,13 @@ const LocationPage = () => {
       </Box>
       <Box sx={{ display: "flex", flexWrap: "wrap" }}>
         {locations.map((item) => (
-          <ItemCard key={item.id} icon={<PlaceIcon />} title={item.name} />
+
+          <ItemCard
+            href={`/backoffice/locations/${item.id}`}
+            key={item.id}
+            title={item.name}
+            icon={<PlaceIcon />}
+          />
         ))}
       </Box>
       <NewLocation open={open} setOpen={setOpen} />

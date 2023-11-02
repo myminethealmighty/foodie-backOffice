@@ -7,45 +7,40 @@ import {
   Select,
   SelectChangeEvent,
 } from "@mui/material";
-import { Location } from "@prisma/client";
 import { useEffect, useState } from "react";
 
 const SettingsPage = () => {
   const locations = useAppSelector((state) => state.location.items);
-  const [selectedLocation, setSelectedLocation] = useState<Location>();
+  const [locationId, setLocationId] = useState<number>();
 
   useEffect(() => {
-    const locationId = localStorage.getItem("selectedLocationId");
-    if (locationId) {
-      const selectedLocation = locations.find(
-        (item) => item.id === Number(locationId)
-      );
-      setSelectedLocation(selectedLocation);
-    } else {
-      const firstLocation = locations[0];
-      setSelectedLocation(firstLocation);
+    if (locations.length) {
+      const selectedLocationId = localStorage.getItem("selectedLocationId");
+      if (selectedLocationId) {
+        setLocationId(Number(selectedLocationId));
+      } else {
+        const firstLocationId = locations[0].id;
+        setLocationId(Number(firstLocationId));
+        localStorage.setItem("selectedLocationId", String(firstLocationId));
+      }
     }
-  }, []);
+  }, [locations]);
+  
 
   const handleLocationChange = (evt: SelectChangeEvent<number>) => {
-    const selectedLocation = locations.find(
-      (item) => item.id === evt.target.value
-    );
-
-    if (selectedLocation) {
-      setSelectedLocation(selectedLocation);
-      localStorage.setItem("selectedLocationId", String(selectedLocation.id));
-    }
+    localStorage.setItem("selectedLocationId", String(evt.target.value));
+    setLocationId(Number(evt.target.value));
   };
 
-  if (!selectedLocation) return null;
+
+  if (!locationId) return null;
 
   return (
     <Box>
       <FormControl fullWidth>
         <InputLabel>Location</InputLabel>
         <Select
-          value={selectedLocation.id}
+          value={locationId}
           label="Location"
           onChange={handleLocationChange}
         >

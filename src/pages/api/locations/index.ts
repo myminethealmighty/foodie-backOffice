@@ -27,10 +27,37 @@ export default async function handler(
 
     const isValid = name && address;
     if (!isValid) return res.status(400).send("Bad Request.");
-    const createdcLocation = await prisma.location.create({
+    const createdLocation = await prisma.location.create({
       data: { name, address, companyId },
     });
-    return res.status(200).json(createdcLocation);
+    return res.status(200).json(createdLocation);
+
+  } else if (method === "PUT") {
+    const { id, name } = req.body;
+    const isValid =
+      id && name;
+    if (!isValid) return res.status(400).send("Bad request.");
+    const exist = await prisma.location.findFirst({ where: { id } });
+    if (!exist) return res.status(400).send("Bad request.");
+
+    const menuCategory = await prisma.location.update({
+      data: { name },
+      where: { id },
+    });
+
+    return res.status(200).json({ menuCategory });
+
+  } else if (method === "DELETE") {
+    const locationId = Number(req.query.id);
+    const location = await prisma.location.findFirst({
+      where: { id: locationId },
+    });
+    if (!location) return res.status(400).send("Bad request.");
+    await prisma.location.update({
+      data: { isArchived: true },
+      where: { id: locationId },
+    });
+    return res.status(200).send("Deleted.");
   }
   res.status(405).send("Method Not Allowed!");
 }

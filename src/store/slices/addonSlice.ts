@@ -80,12 +80,12 @@ const addonSlice = createSlice({
         item.id === action.payload.id ? action.payload : item
       );
     },
-    addAddon: (state, action: PayloadAction<Addon>) => {
-      state.items = [...state.items, action.payload];
-    },
     removeAddon: (state, action: PayloadAction<{ id: number }>) => {
       state.items = state.items.filter((item) => item.id !== action.payload.id);
     },
+    addAddon: (state, action: PayloadAction<Addon>) => {
+      state.items = [...state.items, action.payload];
+    }
   },
 });
 

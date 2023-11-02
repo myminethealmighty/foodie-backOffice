@@ -19,6 +19,8 @@ export default async function handler(
       data: { name, locationId },
     });
     return res.status(200).json({ table });
+    
+  
   } else if (method === "PUT") {
     // Data Validation
     const { id,  name, } = req.body;
@@ -31,6 +33,7 @@ export default async function handler(
       where: { id },
     });
     return res.status(200).json({ table });
+    
   } else if (method === "DELETE") {
     const tableId = Number(req.query.id);
     const table = await prisma.table.findFirst({

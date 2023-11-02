@@ -7,7 +7,15 @@ export interface LocationSlice {
   error: Error | null;
 }
 
-export interface CreateNewLocationOptions extends BaseOptions {
+export interface CreateLocationOptions extends BaseOptions {
   name: string;
   address: string;
+}
+export interface UpdateLocationOptions extends BaseOptions {
+  id: number;
+  name: string;
+  companyId: number;
+}
+export interface DeleteLocationOptions extends BaseOptions {
+  id: number;
 }

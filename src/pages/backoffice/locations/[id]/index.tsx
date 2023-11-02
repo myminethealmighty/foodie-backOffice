@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { useAppDispatch, useAppSelector } from "@/store/hook";
-import { deleteTable, updateTable } from "@/store/slices/tableSlice";
-import { UpdateTableOptions } from "@/types/table";
+import { deleteLocation, updateLocation } from "@/store/slices/locationSlice";
+import { UpdateLocationOptions } from "@/types/location";
 import {
   Box,
   Button,
@@ -14,41 +14,41 @@ import {
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
-const TableDetail = () => {
+const LocationDetail = () => {
   const router = useRouter();
-  const tableId = Number(router.query.id);
-  const tables = useAppSelector((state) => state.table.items);
-  const table = tables.find((item) => item.id === tableId);
-  const [data, setData] = useState<UpdateTableOptions>();
+  const locationId = Number(router.query.id);
+  const locations = useAppSelector((state) => state.location.items);
+  const location = locations.find((item) => item.id === locationId);
+  const [data, setData] = useState<UpdateLocationOptions>();
   const dispatch = useAppDispatch();
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    if (table) {
+    if (location) {
       setData({
-        id: table.id,
-        name: table.name,
-        locationId: table.locationId,
+        id: location.id,
+        name: location.name,
+        companyId: location.companyId,
       });
     }
-  }, [table]);
+  }, [location]);
 
-  if (!table || !data) return null;
+  if (!location || !data) return null;
 
 
-  
 
-  const handleDeleteTable = () => {
+
+  const handleDeleteLocation = () => {
     dispatch(
-      deleteTable({
-        id: table.id,
-        onSuccess: () => router.push("/backoffice/tables"),
+      deleteLocation({
+        id: location.id,
+        onSuccess: () => router.push("/backoffice/locations"),
       })
     );
   };
 
-  const handleUpdateTable = () => {
-    dispatch(updateTable(data));
+  const handleUpdateLocation = () => {
+    dispatch(updateLocation(data));
   };
 
   return (
@@ -62,25 +62,25 @@ const TableDetail = () => {
         defaultValue={data.name}
         sx={{ mb: 2 }}
         onChange={(evt) =>
-          setData({ ...data, id: table.id, name: evt.target.value })
+          setData({ ...data, id: location.id, name: evt.target.value })
         }
       />
 
       <Button
         variant="contained"
         sx={{ mt: 2, width: "fit-content" }}
-        onClick={handleUpdateTable}
+        onClick={handleUpdateLocation}
       >
         Update
       </Button>
       <Dialog open={open} onClose={() => setOpen(false)}>
-        <DialogTitle>Confirm delete table</DialogTitle>
+        <DialogTitle>Confirm delete location</DialogTitle>
         <DialogContent>
-          Are you sure you want to delete this table?
+          Are you sure you want to delete this location?
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setOpen(false)}>Cancel</Button>
-          <Button variant="contained" onClick={handleDeleteTable}>
+          <Button variant="contained" onClick={handleDeleteLocation}>
             Confirm
           </Button>
         </DialogActions>
@@ -89,4 +89,4 @@ const TableDetail = () => {
   );
 };
 
-export default TableDetail;
+export default LocationDetail;

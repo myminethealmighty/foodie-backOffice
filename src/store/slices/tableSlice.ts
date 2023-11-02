@@ -2,7 +2,6 @@ import { CreateTableOptions, DeleteTableOptions, TableSlice, UpdateTableOptions 
 import { config } from "@/utils/config";
 import { Table } from "@prisma/client";
 import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { addMenu } from "./menuSlice";
 
 const initialState: TableSlice = {
   items: [],
@@ -15,13 +14,13 @@ export const createTable = createAsyncThunk(
   async (options: CreateTableOptions, thunkApi) => {
     const { name, locationId, onSuccess, onError } = options;
     try {
-      const response = await fetch(`${config}/tables`, {
+      const response = await fetch(`${config.apiBaseUrl}/tables`, {
         method: "POST",
         headers: { "content-type": "application/json" },
         body: JSON.stringify({ name, locationId }),
       });
-      const {table  } = await response.json();
-      thunkApi.dispatch(addMenu(table));
+      const { table } = await response.json();
+      thunkApi.dispatch(addTable(table));
       onSuccess && onSuccess();
     } catch (err) {
       onError && onError();
