@@ -16,7 +16,7 @@ export default async function handler(
     const isValid = name && price !== undefined && menuCategoryIds.length > 0;
     if (!isValid) return res.status(400).send("Bad request.");
     const menu = await prisma.menu.create({ data: { name, price } });
-    const newMenuCategoryMenu: { menuCategoryId: number; menuId: number }[] =
+    const newMenuCategoryMenu: { menuCategoryId: number; menuId: number; }[] =
       menuCategoryIds.map((item: number) => ({
         menuCategoryId: item,
         menuId: menu.id,
@@ -40,7 +40,7 @@ export default async function handler(
     });
     // update menuCategoryMenu table
     await prisma.menuCategoryMenu.deleteMany({ where: { menuId: id } });
-    const menuCategoryMenusData: { menuId: number; menuCategoryId: number }[] =
+    const menuCategoryMenusData: { menuId: number; menuCategoryId: number; }[] =
       menuCategoryIds.map((item: number) => ({
         menuId: id,
         menuCategoryId: item,

@@ -109,16 +109,19 @@ export default async function handler(
     } else {
       const companyId = dbUser.companyId;
       const locations = await prisma.location.findMany({
-        where: { companyId , isArchived: false},
+        where: { companyId, isArchived: false },
       });
       const locationIds = locations.map((item) => item.id);
       const menuCategories = await prisma.menuCategory.findMany({
         where: { companyId, isArchived: false },
       });
-      const menuCategoryIds = menuCategories.map((item) => item.companyId);
+
+      // A 3-hour long bug happened here! LOL (item.companyId)
+      const menuCategoryIds = menuCategories.map((item) => item.id);
       const menuCategoryMenus = await prisma.menuCategoryMenu.findMany({
         where: { menuCategoryId: { in: menuCategoryIds }, isArchived: false },
       });
+
       const menuIds = menuCategoryMenus.map((item) => item.menuId);
       const menus = await prisma.menu.findMany({
         where: { id: { in: menuIds }, isArchived: false },
@@ -136,7 +139,7 @@ export default async function handler(
         where: { addonCategoryId: { in: addonCategoryIds }, isArchived: false },
       });
       const tables = await prisma.table.findMany({
-        where: { locationId: { in: locationIds },isArchived: false },
+        where: { locationId: { in: locationIds }, isArchived: false },
       });
       return res.status(200).json({
         locations,

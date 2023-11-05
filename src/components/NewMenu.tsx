@@ -44,13 +44,6 @@ const NewMenu = ({ open, setOpen }: Props) => {
     setNewMenu({ ...newMenu, menuCategoryIds: selectedId });
   };
 
-  const handleRemoveCategory = (id: number) => {
-    const updatedIds = newMenu.menuCategoryIds.filter((item) => item !== id);
-    setNewMenu({ ...newMenu, menuCategoryIds: updatedIds });
-  };
-  // const handleCreateMenu = () => {
-  //   dispatch(createMenu({ ...newMenu, onSuccess: () => setOpen(false) }));
-  // };
   return (
     <Dialog
       open={open}
@@ -89,25 +82,39 @@ const NewMenu = ({ open, setOpen }: Props) => {
                 },
               },
             }}
-            renderValue={(selected) => (
-              <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
-                {selected.map((id) => {
-                  const menuCategory = menuCategories.find(
-                    (item) => item.id === id
+            // renderValue={(selected) => (
+            //   <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+            //     {selected.map((id) => {
+            //       const menuCategory = menuCategories.find(
+            //         (item) => item.id === id
+            //       ) as MenuCategory;
+            //       return (
+            //         <Chip
+            //           key={id}
+            //           label={menuCategory.name}
+            //           onMouseDown={(event) => {
+            //             event.stopPropagation();
+            //           }}
+            //           onDelete={() => handleRemoveCategory(id)}
+            //         />
+            //       );
+            //     })}
+            //   </Box>
+            // )}
+            renderValue={(selectedMenuCategoryIds) => {
+              return selectedMenuCategoryIds
+                .map((selectedMenuCategoryId) => {
+                  return menuCategories.find(
+                    (item) => item.id === selectedMenuCategoryId
                   ) as MenuCategory;
-                  return (
-                    <Chip
-                      key={id}
-                      label={menuCategory.name}
-                      onMouseDown={(event) => {
-                        event.stopPropagation();
-                      }}
-                      onDelete={() => handleRemoveCategory(id)}
-                    />
-                  );
-                })}
-              </Box>
-            )}
+                })
+                .map((item) => (
+                  <Chip
+                    key={item.id}
+
+                    label={item.name} sx={{ mr: 1 }} />
+                ));
+            }}
           >
             {menuCategories.map((item) => (
               <MenuItem key={item.id} value={item.id}>

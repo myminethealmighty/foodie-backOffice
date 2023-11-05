@@ -19,7 +19,7 @@ const MenuCategoryDetail = () => {
   const menuCategories = useAppSelector((state) => state.menuCategory.items);
   const menuCategory = menuCategories.find((item) => item.id === menuCategoryId);
 
-  
+
   const [data, setData] = useState<UpdateMenuCategoryOptions>();
   const dispatch = useAppDispatch();
   const [open, setOpen] = useState(false);
@@ -32,10 +32,6 @@ const MenuCategoryDetail = () => {
 
   if (!menuCategory || !data) return null;
 
-
-
-  
-
   const handleDeleteMenuCategory = () => {
     dispatch(
       deleteMenuCategory({
@@ -46,7 +42,7 @@ const MenuCategoryDetail = () => {
   };
 
   const handleUpdateMenuCategory = () => {
-   dispatch(updateMenuCategory(data));
+    dispatch(updateMenuCategory(data));
   };
 
   return (
@@ -63,8 +59,8 @@ const MenuCategoryDetail = () => {
           setData({ ...data, id: menuCategoryId, name: evt.target.value })
         }
       />
-     
-      
+
+
       <Button
         variant="contained"
         sx={{ mt: 2, width: "fit-content" }}

@@ -1,4 +1,6 @@
 import { useAppDispatch, useAppSelector } from "@/store/hook";
+import { removeAddonCategory } from "@/store/slices/addonCategorySlice";
+import { removeMenuAddonCategoryById } from "@/store/slices/menuAddonCategorySlice";
 import { deleteMenus, updateMenus } from "@/store/slices/menuSlice";
 import { UpdateMenusOptions } from "@/types/menu";
 import {
@@ -27,6 +29,7 @@ const MenuDetail = () => {
   const menuId = Number(router.query.id);
   const menus = useAppSelector((state) => state.menu.items);
   const menuCategories = useAppSelector((state) => state.menuCategory.items);
+  const menuAddonCategories = useAppSelector((state) => state.menuAddonCategory.items);
   const menuCategoryMenus = useAppSelector(
     (state) => state.menuCategoryMenu.items
   );
@@ -54,16 +57,29 @@ const MenuDetail = () => {
     setData({ ...data, id: menuId, menuCategoryIds: selectedIds });
   };
 
-  const handleRemoveCategory = (id: number) => {
-    const updatedIds = data.menuCategoryIds.filter((item) => item !== id);
-    setData({ ...data, menuCategoryIds: updatedIds });
-  };
+  // const handleRemoveCategory = (id: number) => {
+  //   const updatedIds = data.menuCategoryIds.filter((item) => item !== id);
+  //   setData({ ...data, menuCategoryIds: updatedIds });
+  // };
 
   const handleDeleteMenu = () => {
     dispatch(
       deleteMenus({
         id: menuId,
-        onSuccess: () => router.push("/backoffice/menus"),
+        onSuccess: () => {
+          const addonCategoryIds = menuAddonCategories.filter(item => item.menuId === menuId).map(item => item.addonCategoryId);
+          addonCategoryIds.forEach((addonCategoryId) => {
+            const entries = menuAddonCategories.filter(item => item.addonCategoryId === addonCategoryId);
+            if (entries.length === 1) {
+              const menuAddonCategoryId = entries[0].id;
+              dispatch(removeAddonCategory({ id: addonCategoryId }));
+              dispatch(removeMenuAddonCategoryById({ id: menuAddonCategoryId }));
+            }
+          });
+
+
+          router.push("/backoffice/menus");
+        },
       })
     );
   };
@@ -109,10 +125,9 @@ const MenuDetail = () => {
               })
               .map((item) => (
                 <Chip
-                  key={item.id}
-                  label={item.name}
+                  key={item && item.id}
+                  label={item && item.name}
                   sx={{ mr: 1 }}
-                  onDelete={() => handleRemoveCategory(item.id)} // Pass item.id here
                 />
               ));
           }}

@@ -7,6 +7,7 @@ import {
 import { config } from "@/utils/config";
 import { MenuCategory } from "@prisma/client";
 import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { removeMenuCategoryMenu } from "./menuCategoryMenuSlice";
 
 const initialState: MenuCategorySlice = {
   items: [],
@@ -62,6 +63,7 @@ export const deleteMenuCategory = createAsyncThunk(
         method: "DELETE",
       });
       thunkApi.dispatch(removeMenuCategory({ id }));
+      thunkApi.dispatch(removeMenuCategoryMenu({ menuCategoryId: id }));
       onSuccess && onSuccess();
     } catch (err) {
       onError && onError();
