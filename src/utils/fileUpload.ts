@@ -30,6 +30,10 @@ const generateLinkForQRCode = (companyId: number, tableId: number) => {
   return `${config.orderAppUrl}?companyId=${companyId}&tableId=${tableId}`;
 };
 
+export const getQrCodeUrl = (companyId: number, tableId: number) => {
+  return `https://msquarefdc.sgp1.cdn.digitaloceanspaces.com/foodie-pos/min-khant-thar/qrcode/companyId-${companyId}-tableId-${tableId}.png`;
+};
+
 export const qrCodeImageUpload = async (companyId: number, tableId: number) => {
   try {
     const qrImageData = await QRCode.toDataURL(generateLinkForQRCode(companyId, tableId));

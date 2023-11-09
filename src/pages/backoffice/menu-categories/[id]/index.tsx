@@ -1,5 +1,8 @@
 import { useAppDispatch, useAppSelector } from "@/store/hook";
-import { deleteMenuCategory, updateMenuCategory } from "@/store/slices/menuCategorySlice";
+import {
+  deleteMenuCategory,
+  updateMenuCategory,
+} from "@/store/slices/menuCategorySlice";
 import { UpdateMenuCategoryOptions } from "@/types/menuCategory";
 import {
   Box,
@@ -8,7 +11,9 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
-  TextField
+  FormControlLabel,
+  Switch,
+  TextField,
 } from "@mui/material";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -17,16 +22,28 @@ const MenuCategoryDetail = () => {
   const router = useRouter();
   const menuCategoryId = Number(router.query.id);
   const menuCategories = useAppSelector((state) => state.menuCategory.items);
-  const menuCategory = menuCategories.find((item) => item.id === menuCategoryId);
-
+  const menuCategory = menuCategories.find(
+    (item) => item.id === menuCategoryId
+  );
 
   const [data, setData] = useState<UpdateMenuCategoryOptions>();
   const dispatch = useAppDispatch();
   const [open, setOpen] = useState(false);
+  const disableLocationMenuCategories = useAppSelector(
+    (state) => state.disabledLocationMenuCategorySlice.items
+  );
 
   useEffect(() => {
     if (menuCategory) {
-      setData({ ...menuCategory });
+      const disableLocationMenuCategory = disableLocationMenuCategories.find(
+        (item) =>
+          item.locationId === 1 && item.menuCategoryId === menuCategoryId
+      );
+      setData({
+        ...menuCategory,
+        locationId: 1,
+        isAvailable: disableLocationMenuCategory ? false : true,
+      });
     }
   }, [menuCategory]);
 
@@ -42,7 +59,12 @@ const MenuCategoryDetail = () => {
   };
 
   const handleUpdateMenuCategory = () => {
-    dispatch(updateMenuCategory(data));
+    dispatch(
+      updateMenuCategory({
+        ...data,
+        locationId: Number(localStorage.getItem("selectedLocationId")),
+      })
+    );
   };
 
   return (
@@ -59,7 +81,15 @@ const MenuCategoryDetail = () => {
           setData({ ...data, id: menuCategoryId, name: evt.target.value })
         }
       />
-
+      <FormControlLabel
+        control={
+          <Switch
+            defaultChecked={data.isAvailable}
+            onChange={(evt, value) => setData({ ...data, isAvailable: value })}
+          />
+        }
+        label="Available"
+      />
 
       <Button
         variant="contained"

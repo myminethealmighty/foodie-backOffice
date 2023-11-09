@@ -1,5 +1,6 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import { prisma } from "@/utils/db";
+import { getQrCodeUrl, qrCodeImageUpload } from "@/utils/fileUpload";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../auth/[...nextauth]";
@@ -93,8 +94,11 @@ export default async function handler(
 
       const newTableName = "Default Table";
       const table = await prisma.table.create({
-        data: { name: newTableName, locationId: location.id },
+        data: { name: newTableName, locationId: location.id, assetUrl: '' },
       });
+      await qrCodeImageUpload(company.id, table.id);
+      const assetUrl = getQrCodeUrl(company.id, table.id);
+      await prisma.table.update({ data: { assetUrl }, where: { id: table.id } });
 
       res.status(200).json({
         location,
@@ -118,6 +122,7 @@ export default async function handler(
 
       // A 3-hour long bug happened here! LOL (item.companyId)
       const menuCategoryIds = menuCategories.map((item) => item.id);
+      const disabledLocationMenuCategories = await prisma.disabledLocationMenuCategory.findMany({ where: { menuCategoryId: { in: menuCategoryIds } } });
       const menuCategoryMenus = await prisma.menuCategoryMenu.findMany({
         where: { menuCategoryId: { in: menuCategoryIds }, isArchived: false },
       });
@@ -150,6 +155,7 @@ export default async function handler(
         menuCategoryMenus,
         menuCategories,
         tables,
+        disabledLocationMenuCategories,
       });
     }
   }

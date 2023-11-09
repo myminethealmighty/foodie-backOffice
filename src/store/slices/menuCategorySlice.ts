@@ -7,6 +7,10 @@ import {
 import { config } from "@/utils/config";
 import { MenuCategory } from "@prisma/client";
 import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import {
+  addDisabledLocationMenuCategory,
+  removeDisabledLocationMenuCategory,
+} from "./disabledLocationMenuCategorySlice";
 import { removeMenuCategoryMenu } from "./menuCategoryMenuSlice";
 
 const initialState: MenuCategorySlice = {
@@ -38,15 +42,26 @@ export const createMenuCategory = createAsyncThunk(
 export const updateMenuCategory = createAsyncThunk(
   "menuCategory/updateMenuCategory",
   async (options: UpdateMenuCategoryOptions, thunkApi) => {
-    const { id, name, onError, onSuccess } = options;
+    const { id, name, locationId, isAvailable, onError, onSuccess } = options;
     try {
       const response = await fetch(`${config.apiBaseUrl}/menu-categories`, {
         method: "PUT",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ id, name }),
+        body: JSON.stringify({ id, name, locationId, isAvailable }),
       });
-      const { menuCategory } = await response.json();
+      const { menuCategory, disabledLocationMenuCategory } =
+        await response.json();
       thunkApi.dispatch(replaceMenuCategory(menuCategory));
+      if (isAvailable === false) {
+        thunkApi.dispatch(
+          addDisabledLocationMenuCategory(disabledLocationMenuCategory)
+        );
+      } else {
+        thunkApi.dispatch(
+          removeDisabledLocationMenuCategory({ locationId, menuCategoryId: id })
+        );
+      }
+
       onSuccess && onSuccess();
     } catch (err) {
       onError && onError();
@@ -69,7 +84,6 @@ export const deleteMenuCategory = createAsyncThunk(
       onError && onError();
     }
   }
-
 );
 
 const menuCategorySlice = createSlice({
@@ -87,11 +101,16 @@ const menuCategorySlice = createSlice({
         item.id === action.payload.id ? action.payload : item
       );
     },
-    removeMenuCategory: (state, action: PayloadAction<{ id: number; }>) => {
+    removeMenuCategory: (state, action: PayloadAction<{ id: number }>) => {
       state.items = state.items.filter((item) => item.id !== action.payload.id);
     },
   },
 });
 
-export const { setMenuCategories, addMenuCategory, replaceMenuCategory, removeMenuCategory } = menuCategorySlice.actions;
+export const {
+  setMenuCategories,
+  addMenuCategory,
+  replaceMenuCategory,
+  removeMenuCategory,
+} = menuCategorySlice.actions;
 export default menuCategorySlice.reducer;
