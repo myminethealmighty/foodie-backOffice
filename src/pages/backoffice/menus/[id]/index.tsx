@@ -13,11 +13,13 @@ import {
   DialogContent,
   DialogTitle,
   FormControl,
+  FormControlLabel,
   InputLabel,
   ListItemText,
   MenuItem,
   Select,
   SelectChangeEvent,
+  Switch,
   TextField,
 } from "@mui/material";
 import { MenuCategory } from "@prisma/client";
@@ -29,7 +31,9 @@ const MenuDetail = () => {
   const menuId = Number(router.query.id);
   const menus = useAppSelector((state) => state.menu.items);
   const menuCategories = useAppSelector((state) => state.menuCategory.items);
-  const menuAddonCategories = useAppSelector((state) => state.menuAddonCategory.items);
+  const menuAddonCategories = useAppSelector(
+    (state) => state.menuAddonCategory.items
+  );
   const menuCategoryMenus = useAppSelector(
     (state) => state.menuCategoryMenu.items
   );
@@ -43,10 +47,26 @@ const MenuDetail = () => {
   const [data, setData] = useState<UpdateMenusOptions>();
   const dispatch = useAppDispatch();
   const [open, setOpen] = useState(false);
+  const disabledLocationMenus = useAppSelector(
+    (state) => state.disabledLocationMenu.items
+  );
 
   useEffect(() => {
     if (menu) {
-      setData({ ...menu, menuCategoryIds });
+      const selectedLocationId = Number(
+        localStorage.getItem("selectedLocationId")
+      );
+
+      const disabledLocationMenu = disabledLocationMenus.find(
+        (item) =>
+          item.locationId === selectedLocationId && item.menuId === menuId
+      );
+      setData({
+        ...menu,
+        menuCategoryIds,
+        locationId: selectedLocationId,
+        isAvailable: disabledLocationMenu ? false : true,
+      });
     }
   }, [menu]);
 
@@ -67,16 +87,21 @@ const MenuDetail = () => {
       deleteMenus({
         id: menuId,
         onSuccess: () => {
-          const addonCategoryIds = menuAddonCategories.filter(item => item.menuId === menuId).map(item => item.addonCategoryId);
+          const addonCategoryIds = menuAddonCategories
+            .filter((item) => item.menuId === menuId)
+            .map((item) => item.addonCategoryId);
           addonCategoryIds.forEach((addonCategoryId) => {
-            const entries = menuAddonCategories.filter(item => item.addonCategoryId === addonCategoryId);
+            const entries = menuAddonCategories.filter(
+              (item) => item.addonCategoryId === addonCategoryId
+            );
             if (entries.length === 1) {
               const menuAddonCategoryId = entries[0].id;
               dispatch(removeAddonCategory({ id: addonCategoryId }));
-              dispatch(removeMenuAddonCategoryById({ id: menuAddonCategoryId }));
+              dispatch(
+                removeMenuAddonCategoryById({ id: menuAddonCategoryId })
+              );
             }
           });
-
 
           router.push("/backoffice/menus");
         },
@@ -148,6 +173,16 @@ const MenuDetail = () => {
           ))}
         </Select>
       </FormControl>
+
+      <FormControlLabel
+        control={
+          <Switch
+            defaultChecked={data.isAvailable}
+            onChange={(evt, value) => setData({ ...data, isAvailable: value })}
+          />
+        }
+        label="Available"
+      />
       <Button
         variant="contained"
         sx={{ mt: 2, width: "fit-content" }}

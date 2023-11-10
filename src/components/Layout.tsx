@@ -1,41 +1,31 @@
-import { useAppDispatch, useAppSelector } from "@/store/hook";
-import { fetchAppData } from "@/store/slices/appSlice";
 import { Box } from "@mui/material";
-import { useSession } from "next-auth/react";
-import { ReactNode, useEffect } from "react";
-import SideBar from "./Sidebar";
-import Topbar from "./Topbar";
+import { useRouter } from "next/router";
+import BackofficeLayout from "./BackofficeLayout";
+import OrderLayout from "./OrderLayout";
 
 interface Props {
-  children: ReactNode;
+  children: string | JSX.Element | JSX.Element[];
 }
 
 const Layout = ({ children }: Props) => {
-  const { data: session } = useSession();
-  const dispatch = useAppDispatch();
-  const { init } = useAppSelector((state) => state.app);
+  const router = useRouter();
+  const isOrderApp = router.pathname === "/order";
+  const isBackofficeApp = router.pathname.includes("/backoffice");
 
-  useEffect(() => {
-    if (session && !init) {
-      dispatch(fetchAppData({}));
-    }
-  }, [session]);
-
-  // const fetchData = async () => {
-  //   const response = await fetch(`${config.apiBaseUrl}/app`);
-  //   const dataFromServer = await response.json();
-  //   console.log(dataFromServer);
-  // };
-
-  return (
-    <Box>
-      <Topbar />
-      <Box sx={{ display: "flex", position: "relative", zIndex: 5, flex: 1 }}>
-        {session && <SideBar />}
-        <Box sx={{ p: 3, width: "100%", height: "100%" }}>{children}</Box>
+  if (isOrderApp) {
+    return (
+      <Box sx={{ height: "100%" }}>
+        <OrderLayout>{children}</OrderLayout>
       </Box>
-    </Box>
-  );
+    );
+  }
+  if (isBackofficeApp) {
+    return (
+      <Box sx={{ height: "100%" }}>
+        <BackofficeLayout>{children}</BackofficeLayout>
+      </Box>
+    );
+  }
+  return <Box>{children}</Box>;
 };
-
 export default Layout;

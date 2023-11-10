@@ -30,18 +30,22 @@ const MenuCategoryDetail = () => {
   const dispatch = useAppDispatch();
   const [open, setOpen] = useState(false);
   const disableLocationMenuCategories = useAppSelector(
-    (state) => state.disabledLocationMenuCategorySlice.items
+    (state) => state.disabledLocationMenuCategory.items
   );
 
   useEffect(() => {
     if (menuCategory) {
+      const selectedLocationId = Number(
+        localStorage.getItem("selectedLocationId")
+      );
       const disableLocationMenuCategory = disableLocationMenuCategories.find(
         (item) =>
-          item.locationId === 1 && item.menuCategoryId === menuCategoryId
+          item.locationId === selectedLocationId &&
+          item.menuCategoryId === menuCategoryId
       );
       setData({
         ...menuCategory,
-        locationId: 1,
+        locationId: selectedLocationId,
         isAvailable: disableLocationMenuCategory ? false : true,
       });
     }

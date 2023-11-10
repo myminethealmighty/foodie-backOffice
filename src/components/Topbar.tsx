@@ -32,7 +32,7 @@ const Topbar = () => {
         <Box>
           <Button
             variant="contained"
-            onClick={() => signOut({ callbackUrl: "/" })}
+            onClick={() => signOut({ callbackUrl: "/backoffice" })}
           >
             Sign Out
           </Button>

@@ -94,11 +94,14 @@ export default async function handler(
 
       const newTableName = "Default Table";
       const table = await prisma.table.create({
-        data: { name: newTableName, locationId: location.id, assetUrl: '' },
+        data: { name: newTableName, locationId: location.id, assetUrl: "" },
       });
       await qrCodeImageUpload(company.id, table.id);
       const assetUrl = getQrCodeUrl(company.id, table.id);
-      await prisma.table.update({ data: { assetUrl }, where: { id: table.id } });
+      await prisma.table.update({
+        data: { assetUrl },
+        where: { id: table.id },
+      });
 
       res.status(200).json({
         location,
@@ -122,7 +125,10 @@ export default async function handler(
 
       // A 3-hour long bug happened here! LOL (item.companyId)
       const menuCategoryIds = menuCategories.map((item) => item.id);
-      const disabledLocationMenuCategories = await prisma.disabledLocationMenuCategory.findMany({ where: { menuCategoryId: { in: menuCategoryIds } } });
+      const disabledLocationMenuCategories =
+        await prisma.disabledLocationMenuCategory.findMany({
+          where: { menuCategoryId: { in: menuCategoryIds } },
+        });
       const menuCategoryMenus = await prisma.menuCategoryMenu.findMany({
         where: { menuCategoryId: { in: menuCategoryIds }, isArchived: false },
       });
@@ -131,6 +137,11 @@ export default async function handler(
       const menus = await prisma.menu.findMany({
         where: { id: { in: menuIds }, isArchived: false },
       });
+
+      const disabledLocationMenus = await prisma.disabledLocationMenu.findMany({
+        where: { menuId: { in: menuIds } },
+      });
+
       const menuAddonCategories = await prisma.menuAddonCategory.findMany({
         where: { menuId: { in: menuIds }, isArchived: false },
       });
@@ -156,6 +167,7 @@ export default async function handler(
         menuCategories,
         tables,
         disabledLocationMenuCategories,
+        disabledLocationMenus,
       });
     }
   }

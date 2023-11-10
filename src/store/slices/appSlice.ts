@@ -4,6 +4,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { setAddonCategories } from "./addonCategorySlice";
 import { setAddons } from "./addonSlice";
 import { setDisabledLocationMenuCategories } from "./disabledLocationMenuCategorySlice";
+import { setDisabledLocationMenus } from "./disabledLocationMenuSlice";
 import { setLocations } from "./locationSlice";
 import { setMenuAddonCategories } from "./menuAddonCategorySlice";
 import { setMenuCategoryMenus } from "./menuCategoryMenuSlice";
@@ -34,6 +35,7 @@ export const fetchAppData = createAsyncThunk(
         addons,
         tables,
         disabledLocationMenuCategories,
+        disabledLocationMenus,
       } = appData;
       thunkApi.dispatch(setInit(true));
       thunkApi.dispatch(setMenus(menus));
@@ -44,7 +46,10 @@ export const fetchAppData = createAsyncThunk(
       thunkApi.dispatch(setMenuAddonCategories(menuAddonCategories));
       thunkApi.dispatch(setLocations(locations));
       thunkApi.dispatch(setTables(tables));
-      thunkApi.dispatch(setDisabledLocationMenuCategories(disabledLocationMenuCategories));
+      thunkApi.dispatch(
+        setDisabledLocationMenuCategories(disabledLocationMenuCategories)
+      );
+      thunkApi.dispatch(setDisabledLocationMenus(disabledLocationMenus));
       onSuccess && onSuccess();
     } catch (err) {
       onError && onError();

@@ -7,10 +7,14 @@ import {
 } from "@/types/menu";
 import { config } from "@/utils/config";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import {
+  addDisabledLocationMenu,
+  removeDisabledLocationMenu,
+} from "./disabledLocationMenuSlice";
 import { removeMenuAddonCategoryByMenuId } from "./menuAddonCategorySlice";
 import {
   addMenuCategoryMenu,
-  replaceMenuCategoryMenu
+  replaceMenuCategoryMenu,
 } from "./menuCategoryMenuSlice";
 
 const initialState: MenuSlice = {
@@ -39,7 +43,8 @@ export const getMenus = createAsyncThunk(
 export const createMenu = createAsyncThunk(
   "menu/createMenu",
   async (options: CreateMenusOptions, thunkApi) => {
-    const { name, price, menuCategoryIds, assetUrl, onSuccess, onError } = options;
+    const { name, price, menuCategoryIds, assetUrl, onSuccess, onError } =
+      options;
     try {
       const response = await fetch(`${config.apiBaseUrl}/menus`, {
         method: "POST",
@@ -59,16 +64,40 @@ export const createMenu = createAsyncThunk(
 export const updateMenus = createAsyncThunk(
   "menuSlice/updateMenus",
   async (options: UpdateMenusOptions, thunkApi) => {
-    const { id, name, price, menuCategoryIds, onError, onSuccess } = options;
+    const {
+      id,
+      name,
+      price,
+      menuCategoryIds,
+      locationId,
+      isAvailable,
+      onError,
+      onSuccess,
+    } = options;
     try {
       const response = await fetch(`${config.apiBaseUrl}/menus`, {
         method: "PUT",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ id, name, price, menuCategoryIds }),
+        body: JSON.stringify({
+          id,
+          name,
+          price,
+          menuCategoryIds,
+          locationId,
+          isAvailable,
+        }),
       });
-      const { menu, menuCategoryMenus } = await response.json();
+      const { menu, menuCategoryMenus, disabledLocationMenus } =
+        await response.json();
       thunkApi.dispatch(replaceMenu(menu));
       thunkApi.dispatch(replaceMenuCategoryMenu(menuCategoryMenus));
+      if (isAvailable === false) {
+        thunkApi.dispatch(addDisabledLocationMenu(disabledLocationMenus));
+      } else {
+        thunkApi.dispatch(
+          removeDisabledLocationMenu({ locationId, menuId: id })
+        );
+      }
       onSuccess && onSuccess();
     } catch (err) {
       onError && onError();
