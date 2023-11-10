@@ -9,7 +9,7 @@ const MenuCategoriesPage = () => {
   const [open, setOpen] = useState(false);
   const menuCategories = useAppSelector((state) => state.menuCategory.items);
   const disabledLocationMenuCategories = useAppSelector(
-    (state) => state.disabledLocationMenuCategorySlice.items
+    (state) => state.disabledLocationMenuCategory.items
   );
   return (
     <Box>
