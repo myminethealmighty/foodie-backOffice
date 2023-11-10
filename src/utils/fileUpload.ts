@@ -25,7 +25,6 @@ export const fileUpload = multer({
   }),
 }).array("files", 1); // Only one photo can be uploaded.
 
-
 const generateLinkForQRCode = (companyId: number, tableId: number) => {
   return `${config.orderAppUrl}?companyId=${companyId}&tableId=${tableId}`;
 };
@@ -36,15 +35,19 @@ export const getQrCodeUrl = (companyId: number, tableId: number) => {
 
 export const qrCodeImageUpload = async (companyId: number, tableId: number) => {
   try {
-    const qrImageData = await QRCode.toDataURL(generateLinkForQRCode(companyId, tableId));
+    const qrImageData = await QRCode.toDataURL(
+      generateLinkForQRCode(companyId, tableId),
+      { scale: 20 }
+    );
 
     const input = {
-      Bucket: 'msquarefdc',
+      Bucket: "msquarefdc",
       Key: `foodie-pos/min-khant-thar/qrcode/companyId-${companyId}-tableId-${tableId}.png`,
-      ACL: 'public-read',
+      ACL: "public-read",
       Body: Buffer.from(
-        qrImageData.replace(/^data:image\/\w+;base64,/, ""), "base64"
-      )
+        qrImageData.replace(/^data:image\/\w+;base64,/, ""),
+        "base64"
+      ),
     };
 
     //@ts-ignore
