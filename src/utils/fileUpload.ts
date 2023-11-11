@@ -12,7 +12,6 @@ const s3Client = new S3Client({
     secretAccessKey: config.spaceSecretAccessKey,
   },
 });
-console.log("config.spaceEndpoint:", config.spaceEndpoint);
 
 export const fileUpload = multer({
   storage: multerS3({

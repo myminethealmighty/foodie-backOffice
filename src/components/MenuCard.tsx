@@ -38,7 +38,7 @@ const MenuCard = ({ menu, href, isAvailable }: Props) => {
         >
           <CardMedia
             sx={{ height: 140, objectFit: "contain" }}
-            image={menu.assetUrl || ""}
+            image={menu.assetUrl || "/default-menu.png"}
             component={"div"}
           />
           <CardContent>

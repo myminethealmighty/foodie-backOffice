@@ -8,7 +8,6 @@ import { useState } from "react";
 const AddonCategoryPage = () => {
   const [open, setOpen] = useState(false);
   const addonCategories = useAppSelector((state) => state.addonCategory.items);
-  console.log(addonCategories);
   return (
     <Box>
       <Box
