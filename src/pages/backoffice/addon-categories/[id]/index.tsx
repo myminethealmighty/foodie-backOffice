@@ -1,4 +1,4 @@
-import { useAppDispatch, useAppSelector } from "@/store/hook";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import {
   deleteAddonCategory,
   updateAddonCategory,

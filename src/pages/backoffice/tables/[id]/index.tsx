@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import { useAppDispatch, useAppSelector } from "@/store/hook";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { deleteTable, updateTable } from "@/store/slices/tableSlice";
 import { UpdateTableOptions } from "@/types/table";
 import {
@@ -9,7 +9,7 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
-  TextField
+  TextField,
 } from "@mui/material";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -34,9 +34,6 @@ const TableDetail = () => {
   }, [table]);
 
   if (!table || !data) return null;
-
-
-  
 
   const handleDeleteTable = () => {
     dispatch(

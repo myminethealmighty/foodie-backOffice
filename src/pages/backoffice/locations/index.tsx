@@ -1,6 +1,6 @@
 import ItemCard from "@/components/ItemCard";
 import NewLocation from "@/components/NewLocation";
-import { useAppSelector } from "@/store/hook";
+import { useAppSelector } from "@/store/hooks";
 import PlaceIcon from "@mui/icons-material/Place";
 import { Box, Button } from "@mui/material";
 import { useState } from "react";
@@ -22,7 +22,6 @@ const LocationPage = () => {
       </Box>
       <Box sx={{ display: "flex", flexWrap: "wrap" }}>
         {locations.map((item) => (
-
           <ItemCard
             href={`/backoffice/locations/${item.id}`}
             key={item.id}

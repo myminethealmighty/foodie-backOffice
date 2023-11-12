@@ -1,4 +1,4 @@
-import { useAppDispatch, useAppSelector } from "@/store/hook";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { createAddon } from "@/store/slices/addonSlice";
 import { CreateAddonOptions } from "@/types/addon";
 import {
@@ -33,7 +33,7 @@ const NewAddon = ({ open, setOpen }: Props) => {
   const [newAddon, setNewAddon] = useState<CreateAddonOptions>(defaultNewAddon);
   const addonCategories = useAppSelector((state) => state.addonCategory.items);
   const dispatch = useAppDispatch();
-  
+
   const handleCreateAddon = () => {
     dispatch(createAddon({ ...newAddon, onSuccess: () => setOpen(false) }));
   };

@@ -1,6 +1,6 @@
 import MenuCard from "@/components/MenuCard";
 import NewMenu from "@/components/NewMenu";
-import { useAppSelector } from "@/store/hook";
+import { useAppSelector } from "@/store/hooks";
 import { Box, Button } from "@mui/material";
 import { useState } from "react";
 

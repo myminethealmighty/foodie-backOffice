@@ -1,4 +1,4 @@
-import { useAppDispatch } from "@/store/hook";
+import { useAppDispatch } from "@/store/hooks";
 import { createMenuCategory } from "@/store/slices/menuCategorySlice";
 import {
   Box,

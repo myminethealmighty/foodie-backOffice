@@ -1,4 +1,4 @@
-import { useAppDispatch, useAppSelector } from "@/store/hook";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { removeAddonCategory } from "@/store/slices/addonCategorySlice";
 import { removeMenuAddonCategoryById } from "@/store/slices/menuAddonCategorySlice";
 import { deleteMenus, updateMenus } from "@/store/slices/menuSlice";

@@ -1,4 +1,4 @@
-import { useAppDispatch, useAppSelector } from "@/store/hook";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { createMenu } from "@/store/slices/menuSlice";
 import { CreateMenusOptions } from "@/types/menu";
 import { config } from "@/utils/config";
@@ -50,12 +50,14 @@ const NewMenu = ({ open, setOpen }: Props) => {
       formData.append("files", menuImage);
       const response = await fetch(`${config.apiBaseUrl}/assets`, {
         method: "POST",
-        body: formData
+        body: formData,
       });
       const { assetUrl } = await response.json();
       newMenuPayload.assetUrl = assetUrl;
     }
-    dispatch(createMenu({ ...newMenuPayload, onSuccess: () => setOpen(false) }));
+    dispatch(
+      createMenu({ ...newMenuPayload, onSuccess: () => setOpen(false) })
+    );
   };
 
   const onFileSelected = (files: File[]) => {
@@ -127,10 +129,7 @@ const NewMenu = ({ open, setOpen }: Props) => {
                   ) as MenuCategory;
                 })
                 .map((item) => (
-                  <Chip
-                    key={item.id}
-
-                    label={item.name} sx={{ mr: 1 }} />
+                  <Chip key={item.id} label={item.name} sx={{ mr: 1 }} />
                 ));
             }}
           >
@@ -144,7 +143,13 @@ const NewMenu = ({ open, setOpen }: Props) => {
         </FormControl>
         <Box sx={{ mt: 2 }}>
           <FileDropZone onFileSelected={onFileSelected} />
-          {menuImage && (<Chip sx={{ mt: 2 }} label={menuImage.name} onDelete={() => setMenuImage(undefined)} />)}
+          {menuImage && (
+            <Chip
+              sx={{ mt: 2 }}
+              label={menuImage.name}
+              onDelete={() => setMenuImage(undefined)}
+            />
+          )}
         </Box>
         <Box sx={{ mt: 3, display: "flex", justifyContent: "flex-end" }}>
           <Button

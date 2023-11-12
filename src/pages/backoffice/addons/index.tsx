@@ -1,6 +1,6 @@
 import ItemCard from "@/components/ItemCard";
 import NewAddon from "@/components/NewAddon";
-import { useAppSelector } from "@/store/hook";
+import { useAppSelector } from "@/store/hooks";
 import EggIcon from "@mui/icons-material/Egg";
 import { Box, Button } from "@mui/material";
 import { useState } from "react";

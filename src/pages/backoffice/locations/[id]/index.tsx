@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import { useAppDispatch, useAppSelector } from "@/store/hook";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { deleteLocation, updateLocation } from "@/store/slices/locationSlice";
 import { UpdateLocationOptions } from "@/types/location";
 import {
@@ -9,7 +9,7 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
-  TextField
+  TextField,
 } from "@mui/material";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -34,9 +34,6 @@ const LocationDetail = () => {
   }, [location]);
 
   if (!location || !data) return null;
-
-
-
 
   const handleDeleteLocation = () => {
     dispatch(

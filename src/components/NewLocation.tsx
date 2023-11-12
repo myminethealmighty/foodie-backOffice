@@ -1,5 +1,5 @@
-import { useAppDispatch } from "@/store/hook";
-import { createNewLocation } from "@/store/slices/locationSlice";
+import { useAppDispatch } from "@/store/hooks";
+import { createLocation } from "@/store/slices/locationSlice";
 import {
   Box,
   Button,
@@ -60,7 +60,7 @@ const NewLocation = ({ open, setOpen }: Props) => {
               variant="contained"
               onClick={() =>
                 dispatch(
-                  createNewLocation({
+                  createLocation({
                     ...newLocation,
                     onSuccess: () => setOpen(false),
                   })

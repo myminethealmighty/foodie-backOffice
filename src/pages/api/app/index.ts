@@ -174,14 +174,14 @@ export default async function handler(
         });
 
         res.status(200).json({
-          location,
-          menuCategory,
-          menu,
-          menuCategoryMenu,
-          addonCategory,
-          menuAddonCategory,
+          location: [location],
+          menuCategory: [menuCategory],
+          menu: [menu],
+          menuCategoryMenu: [menuCategoryMenu],
+          addonCategory: [addonCategory],
+          menuAddonCategory: [menuAddonCategory],
           addons,
-          table,
+          table: [table],
         });
       } else {
         const companyId = dbUser.companyId;

@@ -1,6 +1,6 @@
 import ItemCard from "@/components/ItemCard";
 import NewMenuCategory from "@/components/NewMenuCategory";
-import { useAppSelector } from "@/store/hook";
+import { useAppSelector } from "@/store/hooks";
 import CategoryIcon from "@mui/icons-material/Category";
 import { Box, Button } from "@mui/material";
 import { useState } from "react";

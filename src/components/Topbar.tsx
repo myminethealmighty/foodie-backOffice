@@ -1,7 +1,6 @@
 import { Box, Button, Typography } from "@mui/material";
 import { signOut, useSession } from "next-auth/react";
 import Image from "next/image";
-import logo from "../assets/logo.png";
 
 const Topbar = () => {
   const { data } = useSession();
@@ -17,11 +16,7 @@ const Topbar = () => {
       }}
     >
       <Box sx={{ height: 60 }}>
-        <Image
-          src={logo}
-          alt="logo"
-          style={{ width: "100%", height: "100%" }}
-        />
+        <Image src={"/logo.png"} width={100} height={60} alt="logo" />
       </Box>
 
       <Typography variant="h5" color={"secondary"}>

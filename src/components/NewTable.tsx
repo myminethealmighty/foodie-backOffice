@@ -1,7 +1,14 @@
-import { useAppDispatch } from "@/store/hook";
+import { useAppDispatch } from "@/store/hooks";
 import { createTable } from "@/store/slices/tableSlice";
 import { CreateTableOptions } from "@/types/table";
-import { Box, Button, Dialog, DialogContent, DialogTitle, TextField } from "@mui/material";
+import {
+  Box,
+  Button,
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  TextField,
+} from "@mui/material";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 
 interface Props {
@@ -14,30 +21,40 @@ const defaultNewTable = {
   locationId: undefined,
 };
 
-
-const  NewTable = ({ open, setOpen }: Props) => {
+const NewTable = ({ open, setOpen }: Props) => {
   const [newTable, setNewTable] = useState<CreateTableOptions>(defaultNewTable);
   const dispatch = useAppDispatch();
 
-  useEffect(()=>{
-    setNewTable({...newTable, locationId:Number(localStorage.getItem("selectedLocationId"))})
-  },[])
+  useEffect(() => {
+    setNewTable({
+      ...newTable,
+      locationId: Number(localStorage.getItem("selectedLocationId")),
+    });
+  }, []);
 
-const handleCreateTable = ()=>{
-  dispatch(createTable({...newTable,onSuccess:()=> setOpen(false)}))
-}
+  const handleCreateTable = () => {
+    dispatch(createTable({ ...newTable, onSuccess: () => setOpen(false) }));
+  };
   return (
-    <Dialog open={open} onClose={() => {setOpen(false)
-    setNewTable(defaultNewTable )}}>
+    <Dialog
+      open={open}
+      onClose={() => {
+        setOpen(false);
+        setNewTable(defaultNewTable);
+      }}
+    >
       <DialogTitle>Create Table </DialogTitle>
-      <DialogContent sx={{ display: "flex", flexDirection: "column" ,width: 400}}>
+      <DialogContent
+        sx={{ display: "flex", flexDirection: "column", width: 400 }}
+      >
         <TextField
           placeholder="Name"
           sx={{ mb: 2 }}
-          onChange={(evt) => setNewTable({ ...newTable, name: evt.target.value })}
+          onChange={(evt) =>
+            setNewTable({ ...newTable, name: evt.target.value })
+          }
         />
-        
-         
+
         <Box sx={{ mt: 3, display: "flex", justifyContent: "flex-end" }}>
           <Button
             variant="contained"
@@ -49,7 +66,7 @@ const handleCreateTable = ()=>{
           <Button
             onClick={handleCreateTable}
             variant="contained"
-            disabled={!newTable.name }
+            disabled={!newTable.name}
           >
             Confirm
           </Button>

@@ -1,4 +1,4 @@
-import { useAppSelector } from "@/store/hook";
+import { useAppSelector } from "@/store/hooks";
 import {
   Box,
   FormControl,
@@ -25,13 +25,11 @@ const SettingsPage = () => {
       }
     }
   }, [locations]);
-  
 
   const handleLocationChange = (evt: SelectChangeEvent<number>) => {
     localStorage.setItem("selectedLocationId", String(evt.target.value));
     setLocationId(Number(evt.target.value));
   };
-
 
   if (!locationId) return null;
 

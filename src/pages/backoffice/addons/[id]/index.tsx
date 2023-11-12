@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import { useAppDispatch, useAppSelector } from "@/store/hook";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { deleteAddon, updateAddons } from "@/store/slices/addonSlice";
 import { UpdateAddonOptions } from "@/types/addon";
 import {
