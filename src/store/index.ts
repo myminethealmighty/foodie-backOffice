@@ -2,6 +2,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import addonCategoryReducer from "./slices/addonCategorySlice";
 import addonReducer from "./slices/addonSlice";
 import appReducer from "./slices/appSlice";
+import cartReducer from "./slices/cartSlice";
 import disabledLocationMenuCategoryReducer from "./slices/disabledLocationMenuCategorySlice";
 import disabledLocationMenuReducer from "./slices/disabledLocationMenuSlice";
 import locationReducer from "./slices/locationSlice";
@@ -26,6 +27,7 @@ export const store = configureStore({
     snackbar: snackbarReducer,
     disabledLocationMenuCategory: disabledLocationMenuCategoryReducer,
     disabledLocationMenu: disabledLocationMenuReducer,
+    cart: cartReducer,
   },
 });
 
