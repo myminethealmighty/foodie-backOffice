@@ -55,10 +55,10 @@ export default async function handler(
     );
     if (locationId) {
       if (isAvailable === false) {
-        const exit = await prisma.disabledLocationMenu.findFirst({
+        const exist = await prisma.disabledLocationMenu.findFirst({
           where: { locationId, menuId: id },
         });
-        if (!exit) {
+        if (!exist) {
           await prisma.disabledLocationMenu.create({
             data: { locationId, menuId: id },
           });
@@ -69,8 +69,28 @@ export default async function handler(
         });
       }
     }
+
+    // Error Episode 40
+    // Can Disabled Only one menu category
+
+    const dbUser = await prisma.user.findUnique({
+      where: { email: session.user?.email as string },
+    });
+    const allMenuCategoryIds = (
+      await prisma.menuCategory.findMany({
+        where: { companyId: dbUser?.companyId },
+      })
+    ).map((item) => item.id);
+
+    const menuIds = (
+      await prisma.menuCategoryMenu.findMany({
+        where: { menuCategoryId: { in: allMenuCategoryIds } },
+      })
+    ).map((item) => item.menuId);
+
+    // episode 40 error check
     const disabledLocationMenus = await prisma.disabledLocationMenu.findMany({
-      where: { menuId: id },
+      where: { menuId: { in: menuIds } },
     });
 
     return res

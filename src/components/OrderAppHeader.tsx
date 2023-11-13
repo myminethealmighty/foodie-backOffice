@@ -87,8 +87,8 @@ const OrderAppHeader = ({ cartItemCount }: Props) => {
               variant="body1"
               sx={{ fontStyle: "italic", lineHeight: 1.2 }}
             >
-              Hintada Street 39
-              <br /> Sanchaung, Yangon
+              37ᵗʰ Street,
+              <br /> Between 75ᵗʰ x 76ᵗʰ Street
             </Typography>
           </Box>
         </Box>

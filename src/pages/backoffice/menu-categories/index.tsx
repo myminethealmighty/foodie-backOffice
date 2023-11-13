@@ -25,13 +25,13 @@ const MenuCategoriesPage = () => {
       </Box>
       <Box sx={{ display: "flex", flexWrap: "wrap" }}>
         {menuCategories.map((item) => {
-          const exit = disabledLocationMenuCategories.find(
+          const exist = disabledLocationMenuCategories.find(
             (disabledLocationMenuCategory) =>
               disabledLocationMenuCategory.locationId ===
                 Number(localStorage.getItem("selectedLocationId")) &&
               disabledLocationMenuCategory.menuCategoryId === item.id
           );
-          const isAvailable = exit ? false : true;
+          const isAvailable = exist ? false : true;
           return (
             <ItemCard
               href={`/backoffice/menu-categories/${item.id}`}

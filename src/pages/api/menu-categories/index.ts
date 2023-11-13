@@ -11,7 +11,6 @@ export default async function handler(
   if (!session) return res.status(401).send("Unauthorized.");
   const method = req.method;
   if (method === "POST") {
-
     // Data Validation
     const { name, locationId } = req.body;
     const isValid = name && locationId;
@@ -26,11 +25,9 @@ export default async function handler(
     });
 
     return res.status(200).json(menuCategory);
-
   } else if (method === "PUT") {
     const { id, name, locationId, isAvailable } = req.body;
-    const isValid =
-      id && name;
+    const isValid = id && name;
     if (!isValid) return res.status(400).send("Bad request.");
     const exist = await prisma.menuCategory.findFirst({ where: { id } });
     if (!exist) return res.status(400).send("Bad request.");
@@ -41,24 +38,43 @@ export default async function handler(
     });
 
     if (locationId && isAvailable === false) {
-      const exit = await prisma.disabledLocationMenuCategory.findFirst({ where: { menuCategoryId: id, locationId } });
-      if (exit) return res.status(200).json({ menuCategory, disabledLocationMenuCategory: exist });
-
-      const disabledLocationMenuCategory = await prisma.disabledLocationMenuCategory.create({ data: { locationId, menuCategoryId: id } });
-
-      return res.status(200).json({ menuCategory, disabledLocationMenuCategory });
-
-    } else if (locationId && isAvailable === true) {
-      const exit = await prisma.disabledLocationMenuCategory.findFirst({ where: { menuCategoryId: id, locationId } });
-      if (exit) {
-        await prisma.disabledLocationMenuCategory.delete({ where: { id: exit.id } });
+      const exist = await prisma.disabledLocationMenuCategory.findFirst({
+        where: { menuCategoryId: id, locationId },
+      });
+      if (!exist) {
+        await prisma.disabledLocationMenuCategory.create({
+          data: { locationId, menuCategoryId: id },
+        });
       }
-      return res.status(200).json({ menuCategory, disabledLocationMenuCategory: exist });
-    } else {
-      return res.status(200).json({ menuCategory });
+    } else if (locationId && isAvailable === true) {
+      const exist = await prisma.disabledLocationMenuCategory.findFirst({
+        where: { menuCategoryId: id, locationId },
+      });
+      if (exist) {
+        await prisma.disabledLocationMenuCategory.delete({
+          where: { id: exist.id },
+        });
+      }
     }
 
+    // Error Episode 40
+    // Can Disabled Only one menu category
 
+    const dbUser = await prisma.user.findUnique({
+      where: { email: session.user?.email as string },
+    });
+    const menuCategoryIds = (
+      await prisma.menuCategory.findMany({
+        where: { companyId: dbUser?.companyId },
+      })
+    ).map((item) => item.id);
+
+    // Error Check episode 40
+    const disabledLocationMenuCategory =
+      await prisma.disabledLocationMenuCategory.findMany({
+        where: { menuCategoryId: { in: menuCategoryIds } },
+      });
+    return res.status(200).json({ menuCategory, disabledLocationMenuCategory });
   } else if (method === "DELETE") {
     const menuCategoryId = Number(req.query.id);
 

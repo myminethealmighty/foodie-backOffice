@@ -49,7 +49,8 @@ const MenuCategoryDetail = () => {
         isAvailable: disableLocationMenuCategory ? false : true,
       });
     }
-  }, [menuCategory]);
+    // make sure to check disableLocationMenuCategories
+  }, [menuCategory, disableLocationMenuCategories]);
 
   if (!menuCategory || !data) return null;
 

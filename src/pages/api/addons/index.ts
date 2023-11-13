@@ -24,8 +24,8 @@ export default async function handler(
     const { id, price, name, addonCategoryId } = req.body;
     const isValid = id && name && price !== undefined && addonCategoryId;
     if (!isValid) return res.status(400).send("Bad Request.");
-    const exit = await prisma.addon.findFirst({ where: { id } });
-    if (!exit) return res.status(400).send("Bad Request.");
+    const exist = await prisma.addon.findFirst({ where: { id } });
+    if (!exist) return res.status(400).send("Bad Request.");
     const addon = await prisma.addon.update({
       data: { name, price, addonCategoryId },
       where: { id },
@@ -42,6 +42,6 @@ export default async function handler(
       where: { id: addonId },
     });
     return res.status(200).send("Deleted.");
-  } 
+  }
   res.status(405).send("Method Not Allowed");
 }

@@ -25,6 +25,7 @@ const Addons = ({
   const addons = useAppSelector((state) => state.addon.items).filter(
     (item) => item.addonCategoryId === addonCategoryId
   );
+
   if (!addonCategory) return null;
   return (
     <Box>

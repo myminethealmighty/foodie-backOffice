@@ -22,7 +22,7 @@ export default async function handler(
     const isValid = name && locationId && dbUser;
     if (!isValid) return res.status(400).send("Bad Request.");
     const table = await prisma.table.create({
-      data: { name, locationId, assetUrl: '' },
+      data: { name, locationId, assetUrl: "" },
     });
     const companyId = dbUser.companyId;
     const tableId = table.id;
@@ -31,20 +31,18 @@ export default async function handler(
     await prisma.table.update({ data: { assetUrl }, where: { id: table.id } });
 
     return res.status(200).json({ table });
-
   } else if (method === "PUT") {
     // Data Validation
-    const { id, name, } = req.body;
+    const { id, name } = req.body;
     const isValid = id && name;
     if (!isValid) return res.status(400).send("Bad Request.");
-    const exit = await prisma.table.findFirst({ where: { id } });
-    if (!exit) return res.status(400).send("Bad Request.");
+    const exist = await prisma.table.findFirst({ where: { id } });
+    if (!exist) return res.status(400).send("Bad Request.");
     const table = await prisma.table.update({
       data: { name },
       where: { id },
     });
     return res.status(200).json({ table });
-
   } else if (method === "DELETE") {
     const tableId = Number(req.query.id);
     const table = await prisma.table.findFirst({

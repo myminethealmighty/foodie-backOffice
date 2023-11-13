@@ -68,7 +68,8 @@ const MenuDetail = () => {
         isAvailable: disabledLocationMenu ? false : true,
       });
     }
-  }, [menu]);
+    // make sure to check disabledLocationMenus
+  }, [menu, disabledLocationMenus]);
 
   if (!menu || !data) return null;
 
