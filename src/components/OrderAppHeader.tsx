@@ -1,5 +1,6 @@
+import Home from "@mui/icons-material/Home";
 import ShoppingCartCheckoutIcon from "@mui/icons-material/ShoppingCartCheckout";
-import { Box, Typography } from "@mui/material";
+import { Badge, Box, Typography } from "@mui/material";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import React from "react";
@@ -12,8 +13,8 @@ const OrderAppHeader = ({ cartItemCount }: Props) => {
   const router = useRouter();
   const isHome = router.pathname === "/order";
   const isCart = router.pathname === "/order/cart";
-  const isActiveOrder = router.pathname.includes("/order/active-order");
-  const showCartIcon = !isCart && !isActiveOrder;
+  const isActiveOrder = router.pathname.includes("/order/activeOrder");
+  const isCartOrActiveOrderPage = isCart || isActiveOrder;
 
   return (
     <Box
@@ -27,40 +28,40 @@ const OrderAppHeader = ({ cartItemCount }: Props) => {
         top: 0,
       }}
     >
-      {showCartIcon && (
-        <Box
-          sx={{
-            position: "absolute",
-            top: 10,
-            right: { xs: 40, md: 80, lg: 200 },
-            cursor: "pointer",
-          }}
-          onClick={() =>
-            router.push({ pathname: "/order/cart", query: router.query })
-          }
-        >
-          <ShoppingCartCheckoutIcon
+      <Box
+        sx={{
+          position: "absolute",
+          top: 10,
+          right: { xs: 40, md: 80, lg: 200 },
+          cursor: "pointer",
+        }}
+      >
+        {isCartOrActiveOrderPage ? (
+          <Home
+            onClick={() =>
+              router.push({ pathname: "/order", query: router.query })
+            }
             sx={{
               fontSize: "40px",
               color: "#FFE194",
             }}
           />
-          {cartItemCount > 0 && (
-            <Typography
-              variant="h5"
-              sx={{
-                textAlign: "right",
-                color: "#E8F6EF",
-                position: "absolute",
-                top: -10,
-                right: -10,
-              }}
-            >
-              {cartItemCount}
-            </Typography>
-          )}
-        </Box>
-      )}
+        ) : (
+          <>
+            <Badge badgeContent={cartItemCount} color="primary">
+              <ShoppingCartCheckoutIcon
+                onClick={() =>
+                  router.push({ pathname: "/order/cart", query: router.query })
+                }
+                sx={{
+                  fontSize: "30px",
+                  color: "#FFE194",
+                }}
+              />
+            </Badge>
+          </>
+        )}
+      </Box>
 
       <Image
         src="/order-app-header.svg"
@@ -78,7 +79,7 @@ const OrderAppHeader = ({ cartItemCount }: Props) => {
               sx={{
                 fontWeight: "bold",
                 color: "#4C4C6D",
-                mt: 12,
+                mt: 15,
               }}
             >
               Awa Sarr

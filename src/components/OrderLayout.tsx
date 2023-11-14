@@ -28,7 +28,7 @@ const OrderLayout = ({ children }: Props) => {
     <Box>
       {/* cartItems is array, cartItems.length */}
       <OrderAppHeader cartItemCount={cartItems.length} />
-      <Box sx={{ position: "relative", zIndex: 5, top: isHome ? 240 : 0 }}>
+      <Box sx={{ position: "relative", top: isHome ? 240 : 0 }}>
         <Box sx={{ width: { xs: "100%", md: "80%", lg: "55%" }, m: "0 auto" }}>
           {children}
         </Box>
