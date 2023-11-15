@@ -1,10 +1,16 @@
-import { CreateLocationOptions, DeleteLocationOptions, LocationSlice, UpdateLocationOptions } from "@/types/location";
+import {
+  CreateLocationOptions,
+  DeleteLocationOptions,
+  LocationSlice,
+  UpdateLocationOptions,
+} from "@/types/location";
 import { config } from "@/utils/config";
 import { Location } from "@prisma/client";
 import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 const initialState: LocationSlice = {
   items: [],
+  selectedLocation: null,
   isLoading: false,
   error: null,
 };
@@ -67,13 +73,25 @@ const locationSlice = createSlice({
   name: "location",
   initialState,
   reducers: {
-    setLocations: (state, action) => {
+    //Get all locations from server, so the type is array[]
+    setLocations: (state, action: PayloadAction<Location[]>) => {
       state.items = action.payload;
       const selectedLocationId = localStorage.getItem("selectedLocationId");
       if (!selectedLocationId) {
         const firstLocationId = action.payload[0].id;
         localStorage.setItem("selectedLocationId", String(firstLocationId));
+        state.selectedLocation = action.payload[0];
+      } else {
+        const selectedLocation = state.items.find(
+          (item) => item.id === Number(selectedLocationId)
+        );
+        if (selectedLocation) {
+          state.selectedLocation = selectedLocation;
+        }
       }
+    },
+    setSelectedLocation: (state, action: PayloadAction<Location>) => {
+      state.selectedLocation = action.payload;
     },
     addLocation: (state, action: PayloadAction<Location>) => {
       state.items = [...state.items, action.payload];
@@ -83,11 +101,17 @@ const locationSlice = createSlice({
         item.id === action.payload.id ? action.payload : item
       );
     },
-    removeLocation: (state, action: PayloadAction<{ id: number; }>) => {
+    removeLocation: (state, action: PayloadAction<{ id: number }>) => {
       state.items = state.items.filter((item) => item.id !== action.payload.id);
     },
   },
 });
 
-export const { setLocations, addLocation, replaceLocation, removeLocation } = locationSlice.actions;
+export const {
+  setLocations,
+  addLocation,
+  replaceLocation,
+  removeLocation,
+  setSelectedLocation,
+} = locationSlice.actions;
 export default locationSlice.reducer;
