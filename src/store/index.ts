@@ -10,6 +10,7 @@ import menuAddonCategoryReducer from "./slices/menuAddonCategorySlice";
 import menuCategoryMenuReducer from "./slices/menuCategoryMenuSlice";
 import menuCategoryReducer from "./slices/menuCategorySlice";
 import menuReducer from "./slices/menuSlice";
+import orderReducer from "./slices/orderSlice";
 import snackbarReducer from "./slices/snackbarSlice";
 import tableReducer from "./slices/tableSlice";
 
@@ -28,6 +29,7 @@ export const store = configureStore({
     disabledLocationMenuCategory: disabledLocationMenuCategoryReducer,
     disabledLocationMenu: disabledLocationMenuReducer,
     cart: cartReducer,
+    order: orderReducer,
   },
 });
 

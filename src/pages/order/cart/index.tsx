@@ -1,25 +1,27 @@
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { removeFromCart } from "@/store/slices/cartSlice";
+import { emptyCart, removeFromCart } from "@/store/slices/cartSlice";
+import { createOrder } from "@/store/slices/orderSlice";
 import { CartItem } from "@/types/cart";
 import { getCartTotalPrice } from "@/utils/generals";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import { Avatar, Box, Button, Divider, Typography } from "@mui/material";
-import { Addon } from "@prisma/client";
+import { Addon, Order } from "@prisma/client";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
 
 const Cart = () => {
   const cartItems = useAppSelector((state) => state.cart.items);
   const router = useRouter();
   const dispatch = useAppDispatch();
-
+  const tableId = Number(router.query.tableId);
+  /*
   useEffect(() => {
     // To prevent direct login, return Order Page
     if (!cartItems.length) {
       router.push({ pathname: "/order", query: router.query });
     }
   }, [cartItems]);
+  */
 
   const renderAddons = (addons: Addon[]) => {
     if (!addons.length) return;
@@ -49,22 +51,21 @@ const Cart = () => {
   };
 
   const confirmOrder = async () => {
-    /* const { locationId, tableId } = query;
-    const isValid = locationId && tableId && cartItems.length;
-    if (!isValid) return alert("Required locationId and tableId");
-    const response = await fetch(
-      `${config.apiBaseUrl}/app?locationId=${locationId}&tableId=${tableId}`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+    const isValid = tableId;
+    if (!isValid) return alert("Table ID");
+    dispatch(
+      createOrder({
+        tableId,
+        cartItems,
+        onSuccess: (orders: Order[]) => {
+          dispatch(emptyCart());
+          router.push({
+            pathname: `/order/active-order/${orders[0].orderSeq}`,
+            query: { tableId },
+          });
         },
-        body: JSON.stringify({ cartItems }),
-      }
+      })
     );
-    const orderCreated = await response.json();
-    dispatch(addOrder(orderCreated));
-    router.push({ pathname: `/order/activeOrder/${orderCreated.id}`, query }); */
   };
 
   return (
@@ -81,88 +82,90 @@ const Cart = () => {
         zIndex: 5,
       }}
     >
-      <Box
-        sx={{
-          width: { xs: "100%", md: "500px" },
-        }}
-      >
-        <Typography
-          color={"primary"}
-          variant="h4"
-          sx={{ textAlign: "center", mb: 3 }}
+      {cartItems.length ? (
+        <Box
+          sx={{
+            width: { xs: "100%", md: "500px" },
+          }}
         >
-          Review Your Order
-        </Typography>
-        {cartItems.map((cartItem) => {
-          const { menu, addons, quantity } = cartItem;
-          return (
-            <Box key={cartItem.id}>
-              <Box sx={{ display: "flex", alignItems: "center" }}>
-                <Avatar
-                  sx={{
-                    width: 25,
-                    height: 25,
-                    mr: 1,
-                    backgroundColor: "#1B9C85",
-                  }}
-                >
-                  {quantity}
-                </Avatar>
+          <Typography
+            color={"primary"}
+            variant="h4"
+            sx={{ textAlign: "center", mb: 3 }}
+          >
+            Review Your Order
+          </Typography>
+          {cartItems.map((cartItem) => {
+            const { menu, addons, quantity } = cartItem;
+            return (
+              <Box key={cartItem.id}>
+                <Box sx={{ display: "flex", alignItems: "center" }}>
+                  <Avatar
+                    sx={{
+                      width: 25,
+                      height: 25,
+                      mr: 1,
+                      backgroundColor: "#1B9C85",
+                    }}
+                  >
+                    {quantity}
+                  </Avatar>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      width: "100%",
+                    }}
+                  >
+                    <Typography variant="h6" color={"primary"}>
+                      {menu.name}
+                    </Typography>
+                    <Typography variant="h6" color={"primary"}>
+                      {menu.price}
+                    </Typography>
+                  </Box>
+                </Box>
+                <Box sx={{ pl: 6, mt: 2 }}>{renderAddons(addons)}</Box>
                 <Box
                   sx={{
                     display: "flex",
-                    justifyContent: "space-between",
-                    width: "100%",
+                    justifyContent: "flex-end",
+                    mb: 3,
+                    mt: 1,
                   }}
                 >
-                  <Typography variant="h6" color={"primary"}>
-                    {menu.name}
-                  </Typography>
-                  <Typography variant="h6" color={"primary"}>
-                    {menu.price}
-                  </Typography>
+                  <DeleteIcon
+                    color="primary"
+                    sx={{ mr: 2, cursor: "pointer" }}
+                    onClick={() => handleRemoveFromCart(cartItem)}
+                  />
+                  <EditIcon
+                    color="primary"
+                    sx={{ cursor: "pointer" }}
+                    onClick={() =>
+                      router.push({
+                        pathname: `menus/${menu.id}`,
+                        query: { ...router.query, cartItemId: cartItem.id },
+                      })
+                    }
+                  />
                 </Box>
               </Box>
-              <Box sx={{ pl: 6, mt: 2 }}>{renderAddons(addons)}</Box>
-              <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "flex-end",
-                  mb: 3,
-                  mt: 1,
-                }}
-              >
-                <DeleteIcon
-                  color="primary"
-                  sx={{ mr: 2, cursor: "pointer" }}
-                  onClick={() => handleRemoveFromCart(cartItem)}
-                />
-                <EditIcon
-                  color="primary"
-                  sx={{ cursor: "pointer" }}
-                  onClick={() =>
-                    router.push({
-                      pathname: `menus/${menu.id}`,
-                      query: { ...router.query, cartItemId: cartItem.id },
-                    })
-                  }
-                />
-              </Box>
-            </Box>
-          );
-        })}
-        <Divider />
-        <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 2 }}>
-          <Typography variant="h4" color="primary">
-            Total: {getCartTotalPrice(cartItems)}
-          </Typography>
+            );
+          })}
+          <Divider />
+          <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 2 }}>
+            <Typography variant="h4" color="primary">
+              Total: {getCartTotalPrice(cartItems)}
+            </Typography>
+          </Box>
+          <Box sx={{ mt: 3, textAlign: "center" }} onClick={confirmOrder}>
+            <Button variant="contained">Confirm order</Button>
+          </Box>
         </Box>
-        <Box sx={{ mt: 3, textAlign: "center" }} onClick={confirmOrder}>
-          <Button disabled variant="contained">
-            Confirm order
-          </Button>
-        </Box>
-      </Box>
+      ) : (
+        <Typography>Your Cart is Empty.</Typography>
+      )}
     </Box>
   );
 };

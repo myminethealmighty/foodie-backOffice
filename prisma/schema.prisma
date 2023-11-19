@@ -134,8 +134,8 @@ model Order {
   id         Int         @id @default(autoincrement())
   menu       Menu        @relation(fields: [menuId], references: [id])
   menuId     Int
-  addon      Addon       @relation(fields: [addonId], references: [id])
-  addonId    Int
+  addon      Addon?      @relation(fields: [addonId], references: [id])
+  addonId    Int?
   quantity   Int
   orderSeq   String
   status     ORDERSTATUS

@@ -13,7 +13,7 @@ const OrderAppHeader = ({ cartItemCount }: Props) => {
   const router = useRouter();
   const isHome = router.pathname === "/order";
   const isCart = router.pathname === "/order/cart";
-  const isActiveOrder = router.pathname.includes("/order/activeOrder");
+  const isActiveOrder = router.pathname.includes("/order/active-order");
   const isCartOrActiveOrderPage = isCart || isActiveOrder;
 
   return (
@@ -39,7 +39,10 @@ const OrderAppHeader = ({ cartItemCount }: Props) => {
         {isCartOrActiveOrderPage ? (
           <Home
             onClick={() =>
-              router.push({ pathname: "/order", query: router.query })
+              router.push({
+                pathname: "/order",
+                query: { tableId: router.query.tableId },
+              })
             }
             sx={{
               fontSize: "40px",
