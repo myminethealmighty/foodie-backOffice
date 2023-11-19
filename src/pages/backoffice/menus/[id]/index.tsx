@@ -3,6 +3,7 @@ import { removeAddonCategory } from "@/store/slices/addonCategorySlice";
 import { removeMenuAddonCategoryById } from "@/store/slices/menuAddonCategorySlice";
 import { deleteMenus, updateMenus } from "@/store/slices/menuSlice";
 import { UpdateMenusOptions } from "@/types/menu";
+import { config } from "@/utils/config";
 import {
   Box,
   Button,
@@ -23,8 +24,9 @@ import {
   TextField,
 } from "@mui/material";
 import { MenuCategory } from "@prisma/client";
+import Image from "next/image";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 
 const MenuDetail = () => {
   const router = useRouter();
@@ -114,6 +116,21 @@ const MenuDetail = () => {
     dispatch(updateMenus(data));
   };
 
+  const handleMenuImageUpdate = async (evt: ChangeEvent<HTMLInputElement>) => {
+    const files = evt.target.files;
+    if (files) {
+      const file = files[0];
+      const formData = new FormData();
+      formData.append("files", file);
+      const response = await fetch(`${config.apiBaseUrl}/assets`, {
+        method: "POST",
+        body: formData,
+      });
+      const { assetUrl } = await response.json();
+      dispatch(updateMenus({ ...data, assetUrl }));
+    }
+  };
+
   return (
     <Box sx={{ display: "flex", flexDirection: "column" }}>
       <Box sx={{ display: "flex", justifyContent: "flex-end", mb: 2 }}>
@@ -121,6 +138,27 @@ const MenuDetail = () => {
           Delete
         </Button>
       </Box>
+
+      <Box
+        sx={{ display: "flex", alignItems: "center", flexDirection: "column" }}
+      >
+        <Image
+          src={menu.assetUrl || "/default-menu.png"}
+          alt="menu-image"
+          width={120}
+          height={120}
+          style={{ borderRadius: 8, margin: "0 auto" }}
+        />
+        <Button
+          variant="outlined"
+          sx={{ width: "fit-content", my: 3.5 }}
+          component="label"
+        >
+          Update Image
+          <input type="file" hidden onChange={handleMenuImageUpdate} />
+        </Button>
+      </Box>
+
       <TextField
         defaultValue={menu.name}
         sx={{ mb: 2 }}

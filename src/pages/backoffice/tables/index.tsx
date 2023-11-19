@@ -32,6 +32,7 @@ const TablePage = () => {
       <Box sx={{ display: "flex", flexWrap: "wrap" }}>
         {tables.map((item) => (
           <Box
+            key={item.id}
             sx={{
               display: "flex",
               flexDirection: "column",

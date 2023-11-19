@@ -15,7 +15,7 @@ const Cart = () => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    // To prevent direct login
+    // To prevent direct login, return Order Page
     if (!cartItems.length) {
       router.push({ pathname: "/order", query: router.query });
     }

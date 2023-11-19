@@ -11,18 +11,16 @@ interface Props {
 
 const OrderLayout = ({ children }: Props) => {
   const router = useRouter();
-  const { companyId, tableId } = router.query;
+  const { tableId } = router.query;
   const dispatch = useAppDispatch();
   const cartItems = useAppSelector((state) => state.cart.items);
   const isHome = router.pathname === "/order";
 
   useEffect(() => {
-    if (companyId && tableId) {
-      dispatch(
-        fetchAppData({ companyId: Number(companyId), tableId: Number(tableId) })
-      );
+    if (tableId) {
+      dispatch(fetchAppData({ tableId: Number(tableId) }));
     }
-  }, [companyId, tableId]);
+  }, [tableId]);
 
   return (
     <Box>
