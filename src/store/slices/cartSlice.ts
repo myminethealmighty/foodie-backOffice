@@ -21,10 +21,9 @@ export const cartSlice = createSlice({
       const exist = state.items.find((item) => item.id === action.payload.id);
       if (exist) {
         // Might Replace Addons
-        state.items ===
-          state.items.filter((item) =>
-            item.id === action.payload.id ? action.payload : item
-          );
+        state.items = state.items.map((item) =>
+          item.id === action.payload.id ? action.payload : item
+        );
       } else {
         state.items = [...state.items, action.payload];
       }

@@ -80,6 +80,12 @@ export default async function handler(
           isArchived: false,
         },
       });
+      const tableIds = (
+        await prisma.table.findMany({ where: { locationId: location?.id } })
+      ).map((item) => item.id);
+      const orders = await prisma.order.findMany({
+        where: { tableId: { in: tableIds } },
+      });
       return res.status(200).json({
         locations: [],
         menus,
@@ -91,6 +97,7 @@ export default async function handler(
         tables: [],
         disabledLocationMenuCategories: [],
         disabledLocationMenus: [],
+        orders,
       });
     } else {
       const session = await getServerSession(req, res, authOptions);
@@ -175,12 +182,12 @@ export default async function handler(
         // Create New Table
 
         const newTableName = "Default Table";
-        const table = await prisma.table.create({
+        let table = await prisma.table.create({
           data: { name: newTableName, locationId: location.id, assetUrl: "" },
         });
         await qrCodeImageUpload(table.id);
         const assetUrl = getQrCodeUrl(table.id);
-        await prisma.table.update({
+        table = await prisma.table.update({
           data: { assetUrl },
           where: { id: table.id },
         });
@@ -192,8 +199,11 @@ export default async function handler(
           menuCategoryMenu: [menuCategoryMenu],
           addonCategory: [addonCategory],
           menuAddonCategory: [menuAddonCategory],
-          addons,
           table: [table],
+          disabledLocationMenuCategories: [],
+          disabledLocationMenus: [],
+          addons,
+          orders: [],
         });
       } else {
         const companyId = dbUser.companyId;
@@ -243,6 +253,9 @@ export default async function handler(
         const tables = await prisma.table.findMany({
           where: { locationId: { in: locationIds }, isArchived: false },
         });
+        const orders = await prisma.order.findMany({
+          where: { tableId: { in: tables.map((item) => item.id) } },
+        });
         return res.status(200).json({
           locations,
           menus,
@@ -254,6 +267,7 @@ export default async function handler(
           tables,
           disabledLocationMenuCategories,
           disabledLocationMenus,
+          orders,
         });
       }
     }

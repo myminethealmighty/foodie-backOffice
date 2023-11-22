@@ -27,6 +27,7 @@ export default async function handler(
               addonId: addon.id,
               quantity: cartItem.quantity,
               orderSeq,
+              itemId: cartItem.id,
               status: ORDERSTATUS.PENDING,
               totalPrice: getCartTotalPrice(cartItems),
               tableId,
@@ -35,21 +36,37 @@ export default async function handler(
         }
       } else {
         // Without Addon
-        for (const addon of cartItem.addons) {
-          await prisma.order.create({
-            data: {
-              menuId: cartItem.menu.id,
-              quantity: cartItem.quantity,
-              orderSeq,
-              status: ORDERSTATUS.PENDING,
-              totalPrice: getCartTotalPrice(cartItems),
-              tableId,
-            },
-          });
-        }
+        await prisma.order.create({
+          data: {
+            menuId: cartItem.menu.id,
+            quantity: cartItem.quantity,
+            orderSeq,
+            itemId: cartItem.id,
+            status: ORDERSTATUS.PENDING,
+            totalPrice: getCartTotalPrice(cartItems),
+            tableId,
+          },
+        });
       }
     }
     const orders = await prisma.order.findMany({ where: { orderSeq } });
+    return res.status(200).json({ orders });
+  } else if (method === "PUT") {
+    const itemId = String(req.query.itemId);
+    const isValid = itemId && req.body.status;
+    if (!isValid) return res.status(400).send("Bad Request.");
+    const exist = await prisma.order.findFirst({ where: { itemId } });
+    if (!exist) return res.status(400).send("Bad Request.");
+    const orderSeq = exist.orderSeq;
+    await prisma.order.updateMany({
+      data: { status: req.body.status as ORDERSTATUS },
+      where: { itemId },
+    });
+    const orders = await prisma.order.findMany({
+      where: { orderSeq, isArchived: false },
+      orderBy: { id: "asc" },
+    });
+
     return res.status(200).json({ orders });
   }
   return res.status(405).send("Method Not Allowed.");

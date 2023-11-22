@@ -1,6 +1,11 @@
-import { CreateOrderOptions, OrderSlice } from "@/types/order";
+import {
+  CreateOrderOptions,
+  OrderSlice,
+  UpdateOrderOptions,
+} from "@/types/order";
 import { config } from "@/utils/config";
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { Order } from "@prisma/client";
+import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 const initialState: OrderSlice = {
   items: [],
@@ -26,12 +31,33 @@ export const createOrder = createAsyncThunk(
     }
   }
 );
+export const updateOrder = createAsyncThunk(
+  "order/updateOrder",
+  async (options: UpdateOrderOptions, thunkApi) => {
+    const { itemId, status, onSuccess, onError } = options;
+    try {
+      const response = await fetch(
+        `${config.apiBaseUrl}/orders?itemId=${itemId}`,
+        {
+          method: "PUT",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({ status }),
+        }
+      );
+      const { orders } = await response.json();
+      thunkApi.dispatch(setOrders(orders));
+      onSuccess && onSuccess(orders);
+    } catch (err) {
+      onError && onError();
+    }
+  }
+);
 
 const orderSlice = createSlice({
   name: "table",
   initialState,
   reducers: {
-    setOrders: (state, action) => {
+    setOrders: (state, action: PayloadAction<Order[]>) => {
       state.items = action.payload;
     },
   },
