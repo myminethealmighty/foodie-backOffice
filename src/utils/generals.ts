@@ -9,7 +9,7 @@ export const generateRandomId = () =>{
   (Math.random() + 1).toString(36).substring(7)};
 */
 
-import { Addon, Order } from "@prisma/client";
+import { Addon, Menu, Order, Table } from "@prisma/client";
 import { CartItem } from "../types/cart";
 import { OrderAddon, OrderItem } from "../types/order";
 
@@ -26,7 +26,12 @@ export const getCartTotalPrice = (cart: CartItem[]) => {
   return totalPrice;
 };
 
-export const formatOrders = (orders: Order[], addons: Addon[]) => {
+export const formatOrders = (
+  orders: Order[],
+  addons: Addon[],
+  menus: Menu[],
+  tables: Table[]
+): OrderItem[] => {
   const orderItemIds: string[] = [];
   // if (!orders) return null;
   orders.forEach((order) => {
@@ -35,6 +40,7 @@ export const formatOrders = (orders: Order[], addons: Addon[]) => {
     const exist = orderItemIds.find((orderItemId) => orderItemId === itemId);
     if (!exist) orderItemIds.push(itemId);
   });
+
   const orderItems: OrderItem[] = orderItemIds.map((orderItemId) => {
     const currentOrders = orders.filter(
       (order) => order.itemId === orderItemId
@@ -74,6 +80,10 @@ export const formatOrders = (orders: Order[], addons: Addon[]) => {
       orderAddons: orderAddons.sort(
         (a, b) => a.addonCategoryId - b.addonCategoryId
       ),
+      menu: menus.find((item) => item.id === currentOrders[0].menuId) as Menu,
+      table: tables.find(
+        (item) => item.id === currentOrders[0].tableId
+      ) as Table,
     };
   });
   return orderItems.sort((a, b) => a.itemId.localeCompare(b.itemId));

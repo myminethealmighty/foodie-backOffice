@@ -22,6 +22,10 @@ export default async function handler(
       });
 
       const companyId = location?.companyId;
+
+      const company = await prisma.company.findFirst({
+        where: { id: companyId },
+      });
       let menuCategories = await prisma.menuCategory.findMany({
         where: { companyId: Number(companyId), isArchived: false },
       });
@@ -94,10 +98,11 @@ export default async function handler(
         menuAddonCategories,
         menuCategoryMenus,
         menuCategories,
-        tables: [],
+        tables: [table],
         disabledLocationMenuCategories: [],
         disabledLocationMenus: [],
         orders,
+        company,
       });
     } else {
       const session = await getServerSession(req, res, authOptions);
@@ -110,9 +115,16 @@ export default async function handler(
         // Create New Company
 
         const newCompanyName = "Awa Sarr";
-        const newCompanyAddress = "73 x 38 street";
+        const newCompanyStreet = "73 x 38 street";
+        const newCompanyTownship = "Mahar Aung Myay";
+        const newCompanyCity = "Mandalay";
         const company = await prisma.company.create({
-          data: { name: newCompanyName, address: newCompanyAddress },
+          data: {
+            name: newCompanyName,
+            street: newCompanyStreet,
+            township: newCompanyTownship,
+            city: newCompanyCity,
+          },
         });
 
         // Create New User
@@ -170,12 +182,17 @@ export default async function handler(
 
         // Create New Location
 
-        const newLocationName = "Ma Har Aung Myay Township";
+        const newLocationName = "Mahar Aung Myay";
+        const newLocationStreet = "73 x 38 street";
+        const newLocationTownship = "Mahar Aung Myay";
+        const newLocationCity = "Mandalay";
         const location = await prisma.location.create({
           data: {
             name: newLocationName,
             companyId: company.id,
-            address: newCompanyAddress,
+            street: newLocationStreet,
+            township: newLocationTownship,
+            city: newLocationCity,
           },
         });
 
@@ -204,9 +221,13 @@ export default async function handler(
           disabledLocationMenus: [],
           addons,
           orders: [],
+          company,
         });
       } else {
         const companyId = dbUser.companyId;
+        const company = await prisma.company.findFirst({
+          where: { id: companyId },
+        });
         const locations = await prisma.location.findMany({
           where: { companyId, isArchived: false },
         });
@@ -268,6 +289,7 @@ export default async function handler(
           disabledLocationMenuCategories,
           disabledLocationMenus,
           orders,
+          company,
         });
       }
     }

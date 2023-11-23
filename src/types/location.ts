@@ -10,13 +10,15 @@ export interface LocationSlice {
 
 export interface CreateLocationOptions extends BaseOptions {
   name: string;
-  address: string;
+  street: string;
+  township: string;
+  city: string;
 }
-export interface UpdateLocationOptions extends BaseOptions {
-  id: number;
-  name: string;
-  companyId: number;
-}
-export interface DeleteLocationOptions extends BaseOptions {
-  id: number;
-}
+// export interface UpdateLocationOptions extends BaseOptions {
+//   id: number;
+//   name: string;
+//   companyId: number;
+// }
+// export interface DeleteLocationOptions extends BaseOptions {
+//   id: number;
+// }

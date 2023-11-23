@@ -1,3 +1,4 @@
+import { useAppSelector } from "@/store/hooks";
 import Home from "@mui/icons-material/Home";
 import ShoppingCartCheckoutIcon from "@mui/icons-material/ShoppingCartCheckout";
 import { Badge, Box, Typography } from "@mui/material";
@@ -13,6 +14,7 @@ const OrderAppHeader = ({ cartItemCount }: Props) => {
   const router = useRouter();
   const isHome = router.pathname === "/order";
   const isCart = router.pathname === "/order/cart";
+  const company = useAppSelector((state) => state.company.item);
   const isActiveOrder = router.pathname.includes("/order/active-order");
   const isCartOrActiveOrderPage = isCart || isActiveOrder;
 
@@ -85,14 +87,14 @@ const OrderAppHeader = ({ cartItemCount }: Props) => {
                 mt: 15,
               }}
             >
-              Awa Sarr
+              {company?.name}
             </Typography>
             <Typography
               variant="body1"
               sx={{ fontStyle: "italic", lineHeight: 1.2 }}
             >
-              37ᵗʰ Street,
-              <br /> Between 75ᵗʰ x 76ᵗʰ Street
+              {company?.street}
+              <br /> {company?.township}, {company?.city}
             </Typography>
           </Box>
         </Box>

@@ -3,6 +3,7 @@ import addonCategoryReducer from "./slices/addonCategorySlice";
 import addonReducer from "./slices/addonSlice";
 import appReducer from "./slices/appSlice";
 import cartReducer from "./slices/cartSlice";
+import companyReducer from "./slices/companySlice";
 import disabledLocationMenuCategoryReducer from "./slices/disabledLocationMenuCategorySlice";
 import disabledLocationMenuReducer from "./slices/disabledLocationMenuSlice";
 import locationReducer from "./slices/locationSlice";
@@ -30,6 +31,7 @@ export const store = configureStore({
     disabledLocationMenu: disabledLocationMenuReducer,
     cart: cartReducer,
     order: orderReducer,
+    company: companyReducer,
   },
 });
 

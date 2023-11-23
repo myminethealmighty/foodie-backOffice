@@ -1,3 +1,4 @@
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { Paper, Tooltip, Typography } from "@mui/material";
 import Link from "next/link";
 import { ReactNode } from "react";
@@ -8,9 +9,19 @@ interface Props {
   isAvailable?: boolean;
   href?: string;
   subtitle?: string;
+  selected?: boolean;
+  onClick?: () => void;
 }
 
-const ItemCard = ({ icon, title, isAvailable, href, subtitle }: Props) => {
+const ItemCard = ({
+  icon,
+  title,
+  isAvailable,
+  href,
+  subtitle,
+  selected,
+  onClick,
+}: Props) => {
   if (href) {
     return (
       <Link href={href} style={{ textDecoration: "none", color: "#000000" }}>
@@ -56,8 +67,21 @@ const ItemCard = ({ icon, title, isAvailable, href, subtitle }: Props) => {
         justifyContent: "center",
         alignItems: "center",
         m: 2,
+        position: "relative",
+        cursor: "pointer",
       }}
+      onClick={() => onClick && onClick()}
     >
+      {selected && (
+        <CheckCircleIcon
+          sx={{
+            position: "absolute",
+            top: 10,
+            right: 10,
+            color: "success.main",
+          }}
+        />
+      )}
       {icon}
       <Typography sx={{ color: "#4C4C6D", fontWeight: "700" }}>
         {title}

@@ -11,11 +11,29 @@ export default async function handler(
   res: NextApiResponse
 ) {
   const method = req.method;
-  if (method === "POST") {
+  /*
+  
+  */
+  if (method === "GET") {
+    const isValid = req.query.orderSeq;
+    if (!isValid) return res.status(400).send("Bad Request.");
+    const orderSeq = String(req.query.orderSeq);
+    const exist = await prisma.order.findMany({ where: { orderSeq } });
+    if (!exist) return res.status(400).send("Bad Request.");
+    return res.status(200).json({ orders: exist });
+  } else if (method === "POST") {
     const { tableId, cartItems } = req.body;
     const isValid = tableId && cartItems;
-    const orderSeq = nanoid();
     if (!isValid) return res.status(400).send("Bad Requsest.");
+
+    const order = await prisma.order.findFirst({
+      where: {
+        tableId,
+        status: { in: [ORDERSTATUS.PENDING, ORDERSTATUS.COOKING] },
+      },
+    });
+    const orderSeq = order ? order.orderSeq : nanoid();
+
     for (const item of cartItems) {
       const cartItem = item as CartItem;
       const hasAddon = cartItem.addons.length > 0;

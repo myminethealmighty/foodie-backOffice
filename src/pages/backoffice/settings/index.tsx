@@ -1,63 +1,73 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { setSelectedLocation } from "@/store/slices/locationSlice";
-import {
-  Box,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
-  SelectChangeEvent,
-} from "@mui/material";
+import { updateCompany } from "@/store/slices/companySlice";
+import { UpdateCompanyOptions } from "@/types/company";
+import { Box, Button, TextField } from "@mui/material";
 import { useEffect, useState } from "react";
 
-const SettingsPage = () => {
-  const locations = useAppSelector((state) => state.location.items);
-  const [locationId, setLocationId] = useState<number>();
+const TableDetail = () => {
+  const company = useAppSelector((state) => state.company.item);
+  const [data, setData] = useState<UpdateCompanyOptions>();
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    if (locations.length) {
-      const selectedLocationId = localStorage.getItem("selectedLocationId");
-      if (selectedLocationId) {
-        setLocationId(Number(selectedLocationId));
-        const location = locations.find(
-          (item) => item.id === Number(selectedLocationId)
-        );
-        location && dispatch(setSelectedLocation(location));
-      } else {
-        const firstLocationId = locations[0].id;
-        setLocationId(Number(firstLocationId));
-        localStorage.setItem("selectedLocationId", String(firstLocationId));
-        dispatch(setSelectedLocation(locations[0]));
-      }
+    if (company) {
+      setData({
+        id: company.id,
+        name: company.name,
+        street: company.street,
+        township: company.township,
+        city: company.city,
+      });
     }
-  }, [locations, locationId]);
+  }, [company]);
 
-  const handleLocationChange = (evt: SelectChangeEvent<number>) => {
-    localStorage.setItem("selectedLocationId", String(evt.target.value));
-    setLocationId(Number(evt.target.value));
+  if (!company || !data) return null;
+
+  const handleUpdateCompany = () => {
+    dispatch(updateCompany(data));
   };
 
-  if (!locationId) return null;
-
   return (
-    <Box>
-      <FormControl fullWidth>
-        <InputLabel>Location</InputLabel>
-        <Select
-          value={locationId}
-          label="Location"
-          onChange={handleLocationChange}
-        >
-          {locations.map((item) => (
-            <MenuItem key={item.id} value={item.id}>
-              {item.name}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
+    <Box sx={{ display: "flex", flexDirection: "column" }}>
+      <TextField
+        defaultValue={data.name}
+        sx={{ mb: 2 }}
+        onChange={(evt) =>
+          setData({ ...data, id: company.id, name: evt.target.value })
+        }
+      />
+      <TextField
+        defaultValue={data.street}
+        sx={{ mb: 2 }}
+        onChange={(evt) =>
+          setData({ ...data, id: company.id, street: evt.target.value })
+        }
+      />
+      <TextField
+        defaultValue={data.township}
+        sx={{ mb: 2 }}
+        onChange={(evt) =>
+          setData({ ...data, id: company.id, township: evt.target.value })
+        }
+      />
+      <TextField
+        defaultValue={data.city}
+        sx={{ mb: 2 }}
+        onChange={(evt) =>
+          setData({ ...data, id: company.id, city: evt.target.value })
+        }
+      />
+
+      <Button
+        variant="contained"
+        sx={{ mt: 2, width: "fit-content" }}
+        onClick={handleUpdateCompany}
+      >
+        Update
+      </Button>
     </Box>
   );
 };
 
-export default SettingsPage;
+export default TableDetail;

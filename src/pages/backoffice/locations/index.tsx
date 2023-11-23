@@ -1,13 +1,17 @@
 import ItemCard from "@/components/ItemCard";
 import NewLocation from "@/components/NewLocation";
-import { useAppSelector } from "@/store/hooks";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { setSelectedLocation } from "@/store/slices/locationSlice";
 import PlaceIcon from "@mui/icons-material/Place";
 import { Box, Button } from "@mui/material";
 import { useState } from "react";
 
 const LocationPage = () => {
   const [open, setOpen] = useState(false);
-  const locations = useAppSelector((state) => state.location.items);
+  const dispatch = useAppDispatch();
+  const { items: locations, selectedLocation } = useAppSelector(
+    (state) => state.location
+  );
   return (
     <Box>
       <Box
@@ -23,10 +27,11 @@ const LocationPage = () => {
       <Box sx={{ display: "flex", flexWrap: "wrap" }}>
         {locations.map((item) => (
           <ItemCard
-            href={`/backoffice/locations/${item.id}`}
             key={item.id}
             title={item.name}
             icon={<PlaceIcon />}
+            selected={item.id === selectedLocation?.id}
+            onClick={() => dispatch(setSelectedLocation(item))}
           />
         ))}
       </Box>
