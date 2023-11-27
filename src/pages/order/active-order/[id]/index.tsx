@@ -34,7 +34,13 @@ const ActiveOrder = () => {
 
   return (
     <Box
-      sx={{ zIndex: 5, position: "relative", top: { xs: 50, sm: 150 }, px: 3 }}
+      sx={{
+        zIndex: 5,
+        position: "relative",
+        top: { xs: 50, sm: 150 },
+        px: 3,
+        bgcolor: "red",
+      }}
     >
       <Box
         sx={{

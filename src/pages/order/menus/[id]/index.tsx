@@ -8,7 +8,7 @@ import { Addon } from "@prisma/client";
 import { nanoid } from "nanoid";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 const MenuDetail = () => {
   const { query, isReady, ...router } = useRouter();
@@ -111,7 +111,7 @@ const MenuDetail = () => {
         </Box>
         <Box
           sx={{
-            mt: 5,
+            mt: 3,
             display: "flex",
             flexDirection: "column",
             alignItems: "center",

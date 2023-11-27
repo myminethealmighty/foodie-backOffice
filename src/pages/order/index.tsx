@@ -44,7 +44,7 @@ const OrderApp = () => {
   };
 
   return (
-    <Box sx={{ position: "relative", zIndex: 5, p: 3 }}>
+    <Box sx={{ position: "relative", zIndex: 5, p: 3, bgcolor: "lightblue" }}>
       <Box>
         <Tabs
           TabIndicatorProps={{
