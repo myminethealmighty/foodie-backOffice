@@ -114,6 +114,17 @@ export default async function handler(
       data: { isArchived: true },
       where: { id: menuId },
     });
+    const menuAddonCategoriesRow = await prisma.menuAddonCategory.findMany({
+      where: { menuId },
+    });
+    const addonCategoryIds = menuAddonCategoriesRow.map(
+      (item) => item.addonCategoryId
+    );
+
+    await prisma.menu.update({
+      data: { isArchived: true },
+      where: { id: menuId },
+    });
     return res.status(200).send("Deleted.");
   }
   res.status(405).send("Method not allowed.");

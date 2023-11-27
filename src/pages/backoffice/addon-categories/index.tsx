@@ -20,7 +20,13 @@ const AddonCategoryPage = () => {
           + New
         </Button>
       </Box>
-      <Box sx={{ display: "flex", flexWrap: "wrap" }}>
+      <Box
+        sx={{
+          display: "flex",
+          flexWrap: "wrap",
+          justifyContent: { xs: "center", sm: "flex-start" },
+        }}
+      >
         {addonCategories.map((item) => (
           <ItemCard
             href={`/backoffice/addon-categories/${item.id}`}

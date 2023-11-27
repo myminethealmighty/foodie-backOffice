@@ -1,15 +1,26 @@
 import { useAppSelector } from "@/store/hooks";
-import { Box, Button, Typography } from "@mui/material";
+import MenuIcon from "@mui/icons-material/Menu";
+import {
+  Avatar,
+  Box,
+  Button,
+  Drawer,
+  IconButton,
+  Stack,
+  Typography,
+} from "@mui/material";
 import { signOut, useSession } from "next-auth/react";
 import Image from "next/image";
+import { useState } from "react";
+import SideBar from "./Sidebar";
 
 const Topbar = () => {
   const { data } = useSession();
   const { selectedLocation } = useAppSelector((state) => state.location);
+  const [openDrawer, setOpenDrawer] = useState(false);
   return (
     <Box
       sx={{
-        height: 50,
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center",
@@ -32,7 +43,14 @@ const Topbar = () => {
       </Box>
       {data ? (
         <Box>
+          <IconButton
+            sx={{ display: { xs: "block", sm: "none" } }}
+            onClick={() => setOpenDrawer(true)}
+          >
+            <MenuIcon sx={{ fontSize: "30px", color: "info.main" }} />
+          </IconButton>
           <Button
+            sx={{ display: { xs: "none", sm: "block" } }}
             variant="contained"
             onClick={() => signOut({ callbackUrl: "/backoffice" })}
           >
@@ -42,6 +60,34 @@ const Topbar = () => {
       ) : (
         <span />
       )}
+      <Drawer
+        anchor="right"
+        open={openDrawer}
+        onClose={() => setOpenDrawer(false)}
+      >
+        <Box
+          sx={{
+            bgcolor: "info.main",
+            py: 1,
+            pl: 1,
+            borderBottomRightRadius: "20px",
+          }}
+        >
+          <Stack
+            direction="row"
+            spacing={2}
+            sx={{ display: "flex", alignItems: "center" }}
+          >
+            <Avatar alt="Cindy Baker" src="/user-profile.jpg" />
+            <Typography
+              sx={{ color: "primary.main", fontSize: 16, fontWeight: "bold" }}
+            >
+              Susan
+            </Typography>
+          </Stack>
+        </Box>
+        <SideBar />
+      </Drawer>
     </Box>
   );
 };

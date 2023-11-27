@@ -90,6 +90,12 @@ export default async function handler(
       const orders = await prisma.order.findMany({
         where: { tableId: { in: tableIds } },
       });
+
+      /**
+        const orders = await prisma.order.findMany({
+        where: { tableId: Number(tableId) },
+      });
+       */
       return res.status(200).json({
         locations: [],
         menus,

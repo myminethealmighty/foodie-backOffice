@@ -1,6 +1,7 @@
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { fetchAppData } from "@/store/slices/appSlice";
-import { Box, Typography } from "@mui/material";
+import { Alert, Box, Stack } from "@mui/material";
+import { ORDERSTATUS } from "@prisma/client";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import OrderAppHeader from "./OrderAppHeader";
@@ -18,6 +19,13 @@ const OrderLayout = ({ children }: Props) => {
   const cartItems = useAppSelector((state) => state.cart.items);
   const isHome = router.pathname === "/order";
   const isActiveOrderPage = router.pathname.includes("active-order");
+  const showActiveOrderFooter =
+    !isActiveOrderPage &&
+    orders.some(
+      (item) =>
+        item.status === ORDERSTATUS.PENDING ||
+        item.status === ORDERSTATUS.COOKING
+    );
 
   useEffect(() => {
     if (tableId) {
@@ -29,26 +37,32 @@ const OrderLayout = ({ children }: Props) => {
     <Box>
       {/* cartItems is array, cartItems.length */}
       <OrderAppHeader cartItemCount={cartItems.length} />
-      <Box sx={{ position: "relative", top: isHome ? 240 : 0 }}>
+      <Box
+        sx={{
+          position: "relative",
+          top: isHome ? { xs: 50, sm: 240 } : 0,
+          mb: 5,
+          overflow: "hidden",
+        }}
+      >
         <Box sx={{ width: { xs: "100%", md: "80%", lg: "55%" }, m: "0 auto" }}>
           {children}
         </Box>
       </Box>
-      {orders.length && !isActiveOrderPage && (
+      {showActiveOrderFooter && (
         <Box
           sx={{
             height: 50,
             width: "100vw",
-            bgcolor: "primary.main",
             position: "fixed",
-            bottom: 0,
+            bottom: 8,
             display: "flex",
             zIndex: 5,
             justifyContent: "center",
             alignItems: "center",
           }}
         >
-          <Typography
+          {/* <Typography
             variant="h6"
             sx={{ color: "secondary.main", userselect: "none" }}
           >
@@ -63,9 +77,35 @@ const OrderLayout = ({ children }: Props) => {
               style={{ cursor: "pointer", textDecoration: "underline" }}
             >
               view
-            </span>{" "}
+            </span>
             .
-          </Typography>
+          </Typography> */}
+          <Stack spacing={2} sx={{ width: { xs: '"90%"', sm: '"50%"' } }}>
+            <Alert
+              severity="info"
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                fontSize: 16,
+                bgcolor: "primary.main",
+                color: "white",
+              }}
+            >
+              You have active order. Click here to{" "}
+              <span
+                onClick={() =>
+                  router.push({
+                    pathname: `/order/active-order/${orders[0].orderSeq}`,
+                    query: router.query,
+                  })
+                }
+                style={{ cursor: "pointer", textDecoration: "underline" }}
+              >
+                view
+              </span>
+              .
+            </Alert>
+          </Stack>
         </Box>
       )}
     </Box>

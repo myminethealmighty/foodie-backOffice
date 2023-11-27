@@ -11,9 +11,7 @@ export default async function handler(
   res: NextApiResponse
 ) {
   const method = req.method;
-  /*
-  
-  */
+
   if (method === "GET") {
     const isValid = req.query.orderSeq;
     if (!isValid) return res.status(400).send("Bad Request.");
@@ -81,7 +79,7 @@ export default async function handler(
       where: { itemId },
     });
     const orders = await prisma.order.findMany({
-      where: { orderSeq, isArchived: false },
+      where: { tableId: exist.tableId, isArchived: false },
       orderBy: { id: "asc" },
     });
 

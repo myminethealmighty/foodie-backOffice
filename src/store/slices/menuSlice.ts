@@ -107,7 +107,7 @@ export const updateMenus = createAsyncThunk(
   }
 );
 
-export const deleteMenus = createAsyncThunk(
+export const deleteMenu = createAsyncThunk(
   "menuSlice/deleteMenus",
   async (options: DeleteMenusOptions, thunkApi) => {
     const { id, onError, onSuccess } = options;

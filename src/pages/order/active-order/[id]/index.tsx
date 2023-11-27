@@ -33,7 +33,9 @@ const ActiveOrder = () => {
   if (!orders.length) return null;
 
   return (
-    <Box sx={{ zIndex: 5, position: "relative", top: 150 }}>
+    <Box
+      sx={{ zIndex: 5, position: "relative", top: { xs: 50, sm: 150 }, px: 3 }}
+    >
       <Box
         sx={{
           justifyContent: "center",
@@ -46,10 +48,21 @@ const ActiveOrder = () => {
           mx: 3,
         }}
       >
-        <Typography>OrderSeq: {orderSeq}</Typography>
+        <Typography sx={{ display: "flex" }}>
+          <Typography sx={{ display: { xs: "none", sm: "flex" } }}>
+            OrderSeq:{" "}
+          </Typography>
+          {orderSeq}
+        </Typography>
         <Typography>Total Price: {orders[0].totalPrice}</Typography>
       </Box>
-      <Box sx={{ display: "flex", flexWrap: "wrap" }}>
+      <Box
+        sx={{
+          display: "flex",
+          flexWrap: "wrap",
+          justifyContent: { xs: "center", sm: "flex-start" },
+        }}
+      >
         {orderItems.map((orderItem) => {
           return (
             <OrderCard

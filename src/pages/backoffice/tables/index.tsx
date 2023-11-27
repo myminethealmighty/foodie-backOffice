@@ -29,7 +29,13 @@ const TablePage = () => {
           + New
         </Button>
       </Box>
-      <Box sx={{ display: "flex", flexWrap: "wrap" }}>
+      <Box
+        sx={{
+          display: "flex",
+          flexWrap: "wrap",
+          justifyContent: { xs: "center", sm: "flex-start" },
+        }}
+      >
         {tables.map((item) => (
           <Box
             key={item.id}

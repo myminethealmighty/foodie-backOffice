@@ -86,12 +86,16 @@ const Cart = () => {
         <Box
           sx={{
             width: { xs: "100%", md: "500px" },
+            mb: 6,
           }}
         >
           <Typography
             color={"primary"}
-            variant="h4"
-            sx={{ textAlign: "center", mb: 3 }}
+            sx={{
+              textAlign: "center",
+              mb: 3,
+              fontSize: { xs: "20px", sm: "30px" },
+            }}
           >
             Review Your Order
           </Typography>
@@ -117,10 +121,16 @@ const Cart = () => {
                       width: "100%",
                     }}
                   >
-                    <Typography variant="h6" color={"primary"}>
+                    <Typography
+                      sx={{ fontSize: { xs: "16px", sm: "20px" } }}
+                      color={"primary"}
+                    >
                       {menu.name}
                     </Typography>
-                    <Typography variant="h6" color={"primary"}>
+                    <Typography
+                      sx={{ fontSize: { xs: "16px", sm: "20px" } }}
+                      color={"primary"}
+                    >
                       {menu.price}
                     </Typography>
                   </Box>
@@ -155,7 +165,10 @@ const Cart = () => {
           })}
           <Divider />
           <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 2 }}>
-            <Typography variant="h4" color="primary">
+            <Typography
+              sx={{ fontSize: { xs: "20px", sm: "30px" } }}
+              color="primary"
+            >
               Total: {getCartTotalPrice(cartItems)}
             </Typography>
           </Box>

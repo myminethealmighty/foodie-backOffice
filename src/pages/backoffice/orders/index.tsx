@@ -18,23 +18,17 @@ const OrderPage = () => {
   const [filteredOrders, setFilteredOrders] = useState<OrderItem[]>([]);
 
   useEffect(() => {
-    if (value) {
+    if (orders.length) {
       const filteredOrder = formatOrders(orders, addons, menus, tables).filter(
         (orderItem) => orderItem.status === value
       );
       setFilteredOrders(filteredOrder);
     }
-  }, [value]);
+  }, [orders, value]);
 
   const handleOrderStatusUpdate = (itemId: string, status: ORDERSTATUS) => {
     dispatch(updateOrder({ itemId, status }));
   };
-
-  useEffect(() => {
-    if (orders.length) {
-      setOrderItems(formatOrders(orders, addons, menus, tables));
-    }
-  }, [orders]);
 
   return (
     <Box>
@@ -58,7 +52,13 @@ const OrderPage = () => {
           </ToggleButton>
         </ToggleButtonGroup>
       </Box>
-      <Box sx={{ display: "flex", flexWrap: "wrap" }}>
+      <Box
+        sx={{
+          display: "flex",
+          flexWrap: "wrap",
+          justifyContent: { xs: "center", sm: "flex-start" },
+        }}
+      >
         {filteredOrders.map((orderItem) => {
           return (
             <OrderCard
