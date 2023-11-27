@@ -42,7 +42,6 @@ const OrderLayout = ({ children }: Props) => {
           position: "relative",
           top: isHome ? { xs: 50, sm: 240 } : 0,
           mb: 5,
-          overflow: "hidden",
         }}
       >
         <Box sx={{ width: { xs: "100%", md: "80%", lg: "55%" }, m: "0 auto" }}>

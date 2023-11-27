@@ -7,7 +7,7 @@ const Hero = () => {
   return (
     <Box
       sx={{
-        mt: "180px",
+        mt: "200px",
         textAlign: "center",
         display: "flex",
         flexDirection: "column",
@@ -39,7 +39,7 @@ const Hero = () => {
               position: "relative",
             }}
           >
-            <Link href={`/order?tableId=1`}>
+            <Link style={{ textDecoration: "none" }} href={`/order?tableId=1`}>
               <Button
                 variant="contained"
                 sx={{
@@ -52,7 +52,7 @@ const Hero = () => {
                 Order App
               </Button>
             </Link>
-            <Link href={`/backoffice`}>
+            <Link style={{ textDecoration: "none" }} href={`/backoffice`}>
               <Button
                 variant="contained"
                 sx={{

@@ -78,7 +78,7 @@ const Cart = () => {
         borderRadius: 15,
         mx: 3,
         position: "relative",
-        top: 80,
+        top: { xs: 30, sm: 150 },
         zIndex: 5,
       }}
     >

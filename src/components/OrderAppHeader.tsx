@@ -36,7 +36,7 @@ const OrderAppHeader = ({ cartItemCount }: Props) => {
         >
           {company?.name}
         </Typography>
-        <Box>
+        <Box sx={{ position: "relative" }}>
           {isCartOrActiveOrderPage ? (
             <Home
               onClick={() =>
