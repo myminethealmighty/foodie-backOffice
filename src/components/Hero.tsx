@@ -7,7 +7,7 @@ const Hero = () => {
   return (
     <Box
       sx={{
-        mt: "200px",
+        mt: { xs: "160px", sm: "250px" },
         textAlign: "center",
         display: "flex",
         flexDirection: "column",
