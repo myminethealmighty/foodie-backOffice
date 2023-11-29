@@ -38,7 +38,7 @@ const Topbar = () => {
           Awa Sarr
         </Typography>
         <Typography sx={{ fontSize: 12 }} color={"secondary"}>
-          ({selectedLocation?.name})
+          {selectedLocation?.name}
         </Typography>
       </Box>
       {data ? (

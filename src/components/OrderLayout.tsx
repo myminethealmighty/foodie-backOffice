@@ -21,6 +21,7 @@ const OrderLayout = ({ children }: Props) => {
   const isActiveOrderPage = router.pathname.includes("active-order");
   const showActiveOrderFooter =
     !isActiveOrderPage &&
+    orders.length &&
     orders.some(
       (item) =>
         item.status === ORDERSTATUS.PENDING ||

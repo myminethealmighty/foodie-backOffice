@@ -31,6 +31,9 @@ export default async function handler(
       },
     });
     const orderSeq = order ? order.orderSeq : nanoid();
+    const totalPrice = order
+      ? order.totalPrice + getCartTotalPrice(cartItems)
+      : getCartTotalPrice(cartItems);
 
     for (const item of cartItems) {
       const cartItem = item as CartItem;
@@ -45,7 +48,7 @@ export default async function handler(
               orderSeq,
               itemId: cartItem.id,
               status: ORDERSTATUS.PENDING,
-              totalPrice: getCartTotalPrice(cartItems),
+              totalPrice,
               tableId,
             },
           });
@@ -59,12 +62,17 @@ export default async function handler(
             orderSeq,
             itemId: cartItem.id,
             status: ORDERSTATUS.PENDING,
-            totalPrice: getCartTotalPrice(cartItems),
+            totalPrice,
             tableId,
           },
         });
       }
     }
+    await prisma.order.updateMany({
+      data: { totalPrice },
+      where: { orderSeq },
+    });
+
     const orders = await prisma.order.findMany({ where: { orderSeq } });
     return res.status(200).json({ orders });
   } else if (method === "PUT") {

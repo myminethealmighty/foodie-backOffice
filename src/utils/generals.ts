@@ -40,6 +40,7 @@ export const formatOrders = (
     const exist = orderItemIds.find((orderItemId) => orderItemId === itemId);
     if (!exist) orderItemIds.push(itemId);
   });
+  console.log("orders: ", orders);
 
   const orderItems: OrderItem[] = orderItemIds.map((orderItemId) => {
     const currentOrders = orders.filter(
