@@ -1,11 +1,19 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { setTheme } from "@/store/slices/appSlice";
 import { updateCompany } from "@/store/slices/companySlice";
 import { UpdateCompanyOptions } from "@/types/company";
-import { Box, Button, TextField } from "@mui/material";
+import {
+  Box,
+  Button,
+  FormControlLabel,
+  Switch,
+  TextField,
+} from "@mui/material";
 import { useEffect, useState } from "react";
 
 const TableDetail = () => {
+  const { theme } = useAppSelector((state) => state.app);
   const company = useAppSelector((state) => state.company.item);
   const [data, setData] = useState<UpdateCompanyOptions>();
   const dispatch = useAppDispatch();
@@ -58,7 +66,18 @@ const TableDetail = () => {
           setData({ ...data, id: company.id, city: evt.target.value })
         }
       />
-
+      <FormControlLabel
+        control={
+          <Switch
+            defaultChecked
+            onChange={(evt, value) => {
+              const newTheme = value ? "dark" : "light";
+              dispatch(setTheme(newTheme));
+            }}
+          />
+        }
+        label={theme === "light" ? "Light" : "Dark"}
+      />
       <Button
         variant="contained"
         sx={{ mt: 2, width: "fit-content" }}

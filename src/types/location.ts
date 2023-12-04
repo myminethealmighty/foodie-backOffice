@@ -13,6 +13,7 @@ export interface CreateLocationOptions extends BaseOptions {
   street: string;
   township: string;
   city: string;
+  companyId: number;
 }
 // export interface UpdateLocationOptions extends BaseOptions {
 //   id: number;

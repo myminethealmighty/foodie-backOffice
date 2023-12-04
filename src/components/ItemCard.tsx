@@ -1,5 +1,5 @@
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import { Paper, Tooltip, Typography } from "@mui/material";
+import { Paper, Tooltip, Typography, useTheme } from "@mui/material";
 import Link from "next/link";
 import { ReactNode } from "react";
 
@@ -22,6 +22,7 @@ const ItemCard = ({
   selected,
   onClick,
 }: Props) => {
+  const theme = useTheme();
   if (href) {
     return (
       <Link href={href} style={{ textDecoration: "none", color: "#000000" }}>
@@ -38,16 +39,14 @@ const ItemCard = ({
               alignItems: "center",
               m: 2,
               opacity: isAvailable === false ? 0.4 : 1,
+              bgcolor:
+                theme.palette.mode === "light" ? "info.main" : "success.dark",
             }}
           >
             {icon}
-            <Typography sx={{ color: "#4C4C6D", fontWeight: "700" }}>
-              {title}
-            </Typography>
+            <Typography sx={{ fontWeight: "700" }}>{title}</Typography>
             {subtitle && (
-              <Typography sx={{ color: "#4C4C6D", fontSize: 14 }}>
-                {subtitle}
-              </Typography>
+              <Typography sx={{ fontSize: 14 }}>{subtitle}</Typography>
             )}
           </Paper>
         </Tooltip>
@@ -69,6 +68,7 @@ const ItemCard = ({
         m: 2,
         position: "relative",
         cursor: "pointer",
+        bgcolor: theme.palette.mode === "light" ? "info.main" : "success.dark",
       }}
       onClick={() => onClick && onClick()}
     >
@@ -83,14 +83,8 @@ const ItemCard = ({
         />
       )}
       {icon}
-      <Typography sx={{ color: "#4C4C6D", fontWeight: "700" }}>
-        {title}
-      </Typography>
-      {subtitle && (
-        <Typography sx={{ color: "#4C4C6D", fontSize: 14 }}>
-          {subtitle}
-        </Typography>
-      )}
+      <Typography sx={{ fontWeight: "700" }}>{title}</Typography>
+      {subtitle && <Typography sx={{ fontSize: 14 }}>{subtitle}</Typography>}
     </Paper>
   );
 };

@@ -1,6 +1,6 @@
-import { AppSlice, GetAppDataOptions } from "@/types/app";
+import { AppSlice, GetAppDataOptions, Theme } from "@/types/app";
 import { config } from "@/utils/config";
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { setAddonCategories } from "./addonCategorySlice";
 import { setAddons } from "./addonSlice";
 import { setCompany } from "./companySlice";
@@ -16,6 +16,7 @@ import { setTables } from "./tableSlice";
 
 const initialState: AppSlice = {
   init: false,
+  theme: "light",
   isLoading: false,
   error: null,
 };
@@ -73,8 +74,11 @@ const appSlice = createSlice({
     setInit: (state, action) => {
       state.init = action.payload;
     },
+    setTheme: (state, action: PayloadAction<Theme>) => {
+      state.theme = action.payload;
+    },
   },
 });
 
-export const { setInit } = appSlice.actions;
+export const { setInit, setTheme } = appSlice.actions;
 export default appSlice.reducer;
