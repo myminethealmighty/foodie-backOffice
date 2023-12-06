@@ -1,4 +1,5 @@
-import { Box, useTheme } from "@mui/material";
+import { useAppSelector } from "@/store/hooks";
+import { Box } from "@mui/material";
 import { useRouter } from "next/router";
 import BackofficeLayout from "./BackofficeLayout";
 import OrderLayout from "./OrderLayout";
@@ -8,10 +9,11 @@ interface Props {
 }
 
 const Layout = ({ children }: Props) => {
+  const { theme } = useAppSelector((state) => state.app);
   const router = useRouter();
   const { tableId } = router.query;
   const isOrderApp = tableId;
-  const theme = useTheme();
+
   const isBackofficeApp = router.pathname.includes("/backoffice");
 
   if (isOrderApp) {
@@ -26,8 +28,7 @@ const Layout = ({ children }: Props) => {
       <Box
         sx={{
           height: "100%",
-          bgcolor:
-            theme.palette.mode === "light" ? "info.main" : "success.dark",
+          backgroundColor: theme === "light" ? "info.main" : "primary.light",
         }}
       >
         <BackofficeLayout>{children}</BackofficeLayout>

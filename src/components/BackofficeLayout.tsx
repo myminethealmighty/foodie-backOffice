@@ -15,6 +15,7 @@ const BackofficeLayout = ({ children }: Props) => {
   const { data: session } = useSession();
   const dispatch = useAppDispatch();
   const router = useRouter();
+  const { theme } = useAppSelector((state) => state.app);
   const { init } = useAppSelector((state) => state.app);
 
   useEffect(() => {
@@ -41,7 +42,16 @@ const BackofficeLayout = ({ children }: Props) => {
             <SideBar />
           </Box>
         )}
-        <Box sx={{ p: 3, width: "100%", height: "100%" }}>{children}</Box>
+        <Box
+          sx={{
+            p: 3,
+            width: "100%",
+            minHeight: "100%",
+            backgroundColor: theme === "light" ? "info.main" : "primary.light",
+          }}
+        >
+          {children}
+        </Box>
       </Box>
     </Box>
   );

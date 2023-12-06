@@ -15,22 +15,26 @@ import { useState } from "react";
 import SideBar from "./Sidebar";
 
 const Topbar = () => {
+  const { theme } = useAppSelector((state) => state.app);
   const { data } = useSession();
   const { selectedLocation } = useAppSelector((state) => state.location);
   const [openDrawer, setOpenDrawer] = useState(false);
+
   return (
     <Box
       sx={{
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center",
-        bgcolor: "success.main",
+        bgcolor: theme === "light" ? "success.dark" : "primary.dark",
         px: 2,
+        flexGrow: 1,
       }}
     >
       <Box sx={{ height: 60 }}>
         <Image src={"/logo.png"} width={100} height={60} alt="logo" />
       </Box>
+
       <Box
         sx={{ display: "flex", alignItems: "center", flexDirection: "column" }}
       >
@@ -41,6 +45,7 @@ const Topbar = () => {
           {selectedLocation?.name}
         </Typography>
       </Box>
+
       {data ? (
         <Box>
           <IconButton

@@ -1,4 +1,9 @@
-import { CreateTableOptions, DeleteTableOptions, TableSlice, UpdateTableOptions } from "@/types/table";
+import {
+  CreateTableOptions,
+  DeleteTableOptions,
+  TableSlice,
+  UpdateTableOptions,
+} from "@/types/table";
 import { config } from "@/utils/config";
 import { Table } from "@prisma/client";
 import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
@@ -14,7 +19,7 @@ export const createTable = createAsyncThunk(
   async (options: CreateTableOptions, thunkApi) => {
     const { name, locationId, onSuccess, onError } = options;
     try {
-      const response = await fetch(`${config.apiBaseUrl}/tables`, {
+      const response = await fetch(`${config.backofficeApiUrl}/tables`, {
         method: "POST",
         headers: { "content-type": "application/json" },
         body: JSON.stringify({ name, locationId }),
@@ -33,14 +38,14 @@ export const updateTable = createAsyncThunk(
   async (options: UpdateTableOptions, thunkApi) => {
     const { id, name, onError, onSuccess } = options;
     try {
-      const response = await fetch(`${config.apiBaseUrl}/tables`, {
+      const response = await fetch(`${config.backofficeApiUrl}/tables`, {
         method: "PUT",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ id, name}),
+        body: JSON.stringify({ id, name }),
       });
       const { table } = await response.json();
       thunkApi.dispatch(replaceTable(table));
-       onSuccess && onSuccess();
+      onSuccess && onSuccess();
     } catch (err) {
       onError && onError();
     }
@@ -52,10 +57,10 @@ export const deleteTable = createAsyncThunk(
   async (options: DeleteTableOptions, thunkApi) => {
     const { id, onError, onSuccess } = options;
     try {
-      await fetch(`${config.apiBaseUrl}/tables?id=${id}`, {
+      await fetch(`${config.backofficeApiUrl}/tables?id=${id}`, {
         method: "DELETE",
       });
-      thunkApi.dispatch(removeTable({id}));
+      thunkApi.dispatch(removeTable({ id }));
       onSuccess && onSuccess();
     } catch (err) {
       onError && onError();
@@ -75,7 +80,7 @@ const tableSlice = createSlice({
         item.id === action.payload.id ? action.payload : item
       );
     },
-    removeTable: (state, action: PayloadAction<{id:number}>) => {
+    removeTable: (state, action: PayloadAction<{ id: number }>) => {
       state.items = state.items.filter((item) => item.id !== action.payload.id);
     },
     addTable: (state, action: PayloadAction<Table>) => {
@@ -84,5 +89,6 @@ const tableSlice = createSlice({
   },
 });
 
-export const { setTables , replaceTable,removeTable,addTable} = tableSlice.actions;
+export const { setTables, replaceTable, removeTable, addTable } =
+  tableSlice.actions;
 export default tableSlice.reducer;

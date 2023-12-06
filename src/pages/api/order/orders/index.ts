@@ -81,7 +81,6 @@ export default async function handler(
     if (!isValid) return res.status(400).send("Bad Request.");
     const exist = await prisma.order.findFirst({ where: { itemId } });
     if (!exist) return res.status(400).send("Bad Request.");
-    const orderSeq = exist.orderSeq;
     await prisma.order.updateMany({
       data: { status: req.body.status as ORDERSTATUS },
       where: { itemId },

@@ -27,8 +27,8 @@ export const fetchAppData = createAsyncThunk(
     const { tableId, onError, onSuccess } = options;
     try {
       const appDataUrl = tableId
-        ? `${config.apiBaseUrl}/app?tableId=${tableId}`
-        : `${config.apiBaseUrl}/app`;
+        ? `${config.orderApiUrl}/app?tableId=${tableId}`
+        : `${config.backofficeApiUrl}/app`;
       const response = await fetch(appDataUrl);
       const appData = await response.json();
       const {
@@ -60,6 +60,9 @@ export const fetchAppData = createAsyncThunk(
       thunkApi.dispatch(setDisabledLocationMenus(disabledLocationMenus));
       thunkApi.dispatch(setOrders(orders));
       thunkApi.dispatch(setCompany(company));
+      thunkApi.dispatch(
+        setTheme((localStorage.getItem("theme") as Theme) ?? "light")
+      );
       onSuccess && onSuccess();
     } catch (err) {
       onError && onError();

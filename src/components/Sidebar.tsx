@@ -1,3 +1,4 @@
+import { useAppSelector } from "@/store/hooks";
 import CategoryIcon from "@mui/icons-material/Category";
 import ClassIcon from "@mui/icons-material/Class";
 import EggIcon from "@mui/icons-material/Egg";
@@ -18,11 +19,12 @@ import {
 import Link from "next/link";
 
 const SideBar = () => {
+  const { theme } = useAppSelector((state) => state.app);
   return (
     <Box
       sx={{
         minWidth: 250,
-        backgroundColor: "success.main",
+        backgroundColor: theme === "light" ? "success.main" : "primary.dark",
         borderTopRightRadius: "20px",
         minHeight: "100vh",
       }}

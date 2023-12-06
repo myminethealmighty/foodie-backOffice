@@ -16,7 +16,7 @@ export const createLocation = createAsyncThunk(
     const { name, street, township, city, companyId, onSuccess, onError } =
       options;
     try {
-      const response = await fetch(`${config.apiBaseUrl}/locations`, {
+      const response = await fetch(`${config.backofficeApiUrl}/locations`, {
         method: "POST",
         headers: { "content-type": "application/json" },
         body: JSON.stringify({ name, street, township, city, companyId }),

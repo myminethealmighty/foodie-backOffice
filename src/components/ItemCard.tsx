@@ -1,5 +1,6 @@
+import { useAppSelector } from "@/store/hooks";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import { Paper, Tooltip, Typography, useTheme } from "@mui/material";
+import { Paper, Tooltip, Typography } from "@mui/material";
 import Link from "next/link";
 import { ReactNode } from "react";
 
@@ -22,7 +23,7 @@ const ItemCard = ({
   selected,
   onClick,
 }: Props) => {
-  const theme = useTheme();
+  const theme = useAppSelector((state) => state.app.theme);
   if (href) {
     return (
       <Link href={href} style={{ textDecoration: "none", color: "#000000" }}>
@@ -39,8 +40,7 @@ const ItemCard = ({
               alignItems: "center",
               m: 2,
               opacity: isAvailable === false ? 0.4 : 1,
-              bgcolor:
-                theme.palette.mode === "light" ? "info.main" : "success.dark",
+              backgroundColor: theme === "dark" ? "info.main" : "info.main",
             }}
           >
             {icon}
@@ -68,7 +68,7 @@ const ItemCard = ({
         m: 2,
         position: "relative",
         cursor: "pointer",
-        bgcolor: theme.palette.mode === "light" ? "info.main" : "success.dark",
+        backgroundColor: theme === "dark" ? "info.main" : "inherit",
       }}
       onClick={() => onClick && onClick()}
     >
