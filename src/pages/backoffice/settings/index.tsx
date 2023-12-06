@@ -87,7 +87,9 @@ const TableDetail = () => {
 
   return (
     <Box sx={{ display: "flex", flexDirection: "column" }}>
-      <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+      <Box
+        sx={{ display: { xs: "none", sm: "flex" }, justifyContent: "flex-end" }}
+      >
         <FormControlLabel
           control={
             <MaterialUISwitch
