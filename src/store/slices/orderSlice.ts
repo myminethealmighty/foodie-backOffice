@@ -37,6 +37,7 @@ export const updateOrder = createAsyncThunk(
   async (options: UpdateOrderOptions, thunkApi) => {
     const { itemId, status, onSuccess, onError } = options;
     try {
+      thunkApi.dispatch(setIsLoading(true));
       const response = await fetch(
         `${config.orderApiUrl}/orders?itemId=${itemId}`,
         {
@@ -47,6 +48,7 @@ export const updateOrder = createAsyncThunk(
       );
       const { orders } = await response.json();
       thunkApi.dispatch(setOrders(orders));
+      thunkApi.dispatch(setIsLoading(false));
       onSuccess && onSuccess(orders);
     } catch (err) {
       onError && onError();
@@ -59,11 +61,13 @@ export const refreshOrder = createAsyncThunk(
   async (options: RefreshOrderOptions, thunkApi) => {
     const { orderSeq, onSuccess, onError } = options;
     try {
+      thunkApi.dispatch(setIsLoading(true));
       const response = await fetch(
         `${config.orderApiUrl}/orders?orderSeq=${orderSeq}`
       );
       const { orders } = await response.json();
       thunkApi.dispatch(setOrders(orders));
+      thunkApi.dispatch(setIsLoading(false));
       onSuccess && onSuccess(orders);
     } catch (err) {
       onError && onError();
@@ -78,8 +82,11 @@ const orderSlice = createSlice({
     setOrders: (state, action: PayloadAction<Order[]>) => {
       state.items = action.payload;
     },
+    setIsLoading: (state, action: PayloadAction<boolean>) => {
+      state.isLoading = action.payload;
+    },
   },
 });
 
-export const { setOrders } = orderSlice.actions;
+export const { setOrders, setIsLoading } = orderSlice.actions;
 export default orderSlice.reducer;

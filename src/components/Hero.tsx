@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 
 const Hero = () => {
   const router = useRouter();
+
   return (
     <Box
       sx={{

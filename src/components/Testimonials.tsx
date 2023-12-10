@@ -1,5 +1,6 @@
 import { Avatar, Box, Paper, Slide, Typography } from "@mui/material";
 import Image from "next/image";
+import { useState } from "react";
 
 const testimonials = [
   {
@@ -26,6 +27,8 @@ const testimonials = [
 ];
 
 const Testimonials = () => {
+  const [checked, setChecked] = useState(false);
+
   return (
     <Box
       sx={{
