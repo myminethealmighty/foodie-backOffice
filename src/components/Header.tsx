@@ -11,7 +11,6 @@ const Header = () => {
           display: { xs: "flex", sm: "none" },
           flexDirection: "column",
           alignItems: "center",
-          minHeight: 300,
           position: "fixed",
           top: 0,
           zIndex: 5,
@@ -32,7 +31,7 @@ const Header = () => {
             }}
           >
             <Image
-              src={"/panda-cooking.png"}
+              src={"/piggy-cooking.png"}
               alt="header-image"
               width={160}
               height={160}
@@ -95,7 +94,7 @@ const Header = () => {
             }}
           >
             <Image
-              src={"/panda-cooking.png"}
+              src={"/piggy-cooking.png"}
               alt="header-image"
               width={350}
               height={350}
