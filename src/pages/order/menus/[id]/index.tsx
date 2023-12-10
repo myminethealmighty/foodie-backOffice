@@ -81,13 +81,19 @@ const MenuDetail = () => {
   if (!isReady || !menu) return null;
 
   return (
-    <Box sx={{ position: "relative", zIndex: 5 }}>
+    <Box
+      sx={{
+        position: "relative",
+        px: 2,
+        top: { xs: 10, md: -150, lg: -180, xl: -250 },
+      }}
+    >
       <Box
         sx={{
           display: "flex",
           justifyContent: "center",
           flexDirection: "column",
-          p: 4,
+          alignItems: "center",
         }}
       >
         <Box
@@ -111,7 +117,9 @@ const MenuDetail = () => {
         </Box>
         <Box
           sx={{
-            mt: 3,
+            width: { xs: "100%", sm: 350 },
+            mt: 5,
+            boxSizing: "border-box",
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
@@ -133,7 +141,7 @@ const MenuDetail = () => {
             onClick={handleAddToCart}
             sx={{
               width: "fit-content",
-              mt: 3,
+              mt: 2,
             }}
           >
             {cartItem ? "Update cart" : "Add to cart"}

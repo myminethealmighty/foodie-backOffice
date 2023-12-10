@@ -17,11 +17,7 @@ const Layout = ({ children }: Props) => {
   const isBackofficeApp = router.pathname.includes("/backoffice");
 
   if (isOrderApp) {
-    return (
-      <Box sx={{ height: "100%" }}>
-        <OrderLayout>{children}</OrderLayout>
-      </Box>
-    );
+    return <OrderLayout>{children}</OrderLayout>;
   }
   if (isBackofficeApp) {
     return (

@@ -44,8 +44,21 @@ const OrderApp = () => {
   };
 
   return (
-    <Box sx={{ position: "relative", zIndex: 5, p: 3 }}>
-      <Box>
+    <Box
+      sx={{
+        position: "relative",
+        maxWidth: 900,
+        m: "0 auto",
+        top: { md: -50, lg: -70, xl: -130 },
+      }}
+    >
+      <Box
+        sx={{
+          bgcolor: "info.main",
+          position: "sticky",
+          top: 0,
+        }}
+      >
         <Tabs
           TabIndicatorProps={{
             style: { background: "#1B9C85" },
@@ -53,7 +66,9 @@ const OrderApp = () => {
           value={value}
           onChange={(evt, value) => setValue(value)}
           variant="scrollable"
+          scrollButtons={false}
           sx={{
+            pb: 1,
             ".Mui-selected": {
               color: "#1B9C85",
               fontWeight: "bold",
@@ -74,10 +89,10 @@ const OrderApp = () => {
       </Box>
       <Box
         sx={{
-          pt: 2,
+          mt: { xs: 1, sm: 2, md: 3, lg: 4 },
           display: "flex",
           flexWrap: "wrap",
-          justifyContent: { xs: "center", sm: "flex-start" },
+          px: 2,
         }}
       >
         {renderMenus()}

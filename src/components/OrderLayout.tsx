@@ -1,9 +1,9 @@
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { fetchAppData } from "@/store/slices/appSlice";
-import { Alert, Box, Stack } from "@mui/material";
-import { ORDERSTATUS } from "@prisma/client";
+import { Box, CircularProgress } from "@mui/material";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
+import OrderAppFooter from "./OrderAppFooter";
 import OrderAppHeader from "./OrderAppHeader";
 
 interface Props {
@@ -13,20 +13,8 @@ interface Props {
 const OrderLayout = ({ children }: Props) => {
   const router = useRouter();
   const { tableId } = router.query;
-
   const dispatch = useAppDispatch();
-  const orders = useAppSelector((state) => state.order.items);
-  const cartItems = useAppSelector((state) => state.cart.items);
-  const isHome = router.pathname === "/order";
-  const isActiveOrderPage = router.pathname.includes("active-order");
-  const showActiveOrderFooter =
-    !isActiveOrderPage &&
-    orders.length &&
-    orders.some(
-      (item) =>
-        item.status === ORDERSTATUS.PENDING ||
-        item.status === ORDERSTATUS.COOKING
-    );
+  const { isLoading } = useAppSelector((state) => state.app);
 
   useEffect(() => {
     if (tableId) {
@@ -35,79 +23,32 @@ const OrderLayout = ({ children }: Props) => {
   }, [tableId]);
 
   return (
-    <Box>
-      {/* cartItems is array, cartItems.length */}
-      <OrderAppHeader cartItemCount={cartItems.length} />
-      <Box
-        sx={{
-          position: "relative",
-          top: isHome ? { xs: 50, sm: 240 } : 0,
-          mb: 5,
-        }}
-      >
-        <Box sx={{ width: { xs: "100%", md: "80%", lg: "55%" }, m: "0 auto" }}>
-          {children}
-        </Box>
-      </Box>
-      {showActiveOrderFooter && (
-        <Box
-          sx={{
-            height: 50,
-            width: "100vw",
-            position: "fixed",
-            bottom: 8,
-            display: "flex",
-            zIndex: 5,
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          {/* <Typography
-            variant="h6"
-            sx={{ color: "secondary.main", userselect: "none" }}
+    <Box
+      sx={{
+        minHeight: "100vh",
+        height: "auto",
+        bgcolor: "info.main",
+        pb: { xs: 10, md: 0 },
+      }}
+    >
+      <OrderAppHeader />
+      <Box>
+        {isLoading ? (
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              position: "relative",
+              top: 200,
+            }}
           >
-            You have active order. Click here to{" "}
-            <span
-              onClick={() =>
-                router.push({
-                  pathname: `/order/active-order/${orders[0].orderSeq}`,
-                  query: router.query,
-                })
-              }
-              style={{ cursor: "pointer", textDecoration: "underline" }}
-            >
-              view
-            </span>
-            .
-          </Typography> */}
-          <Stack spacing={2} sx={{ width: { xs: '"90%"', sm: '"50%"' } }}>
-            <Alert
-              severity="info"
-              sx={{
-                display: "flex",
-                justifyContent: "center",
-                fontSize: 16,
-                bgcolor: "primary.main",
-                color: "white",
-              }}
-            >
-              You have active order. Click here to{" "}
-              <span
-                onClick={() =>
-                  router.push({
-                    pathname: `/order/active-order/${orders[0].orderSeq}`,
-                    query: router.query,
-                  })
-                }
-                style={{ cursor: "pointer", textDecoration: "underline" }}
-              >
-                view
-              </span>
-              .
-            </Alert>
-          </Stack>
-        </Box>
-      )}
+            <CircularProgress size={80} />
+          </Box>
+        ) : (
+          children
+        )}
+      </Box>
+      <OrderAppFooter />
     </Box>
   );
 };

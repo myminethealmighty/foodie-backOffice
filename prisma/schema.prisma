@@ -166,7 +166,7 @@ model Table {
 
 model User {
   id        Int     @id @default(autoincrement())
-  email     String  @unique
+  email     String
   name      String?
   company   Company @relation(fields: [companyId], references: [id])
   companyId Int

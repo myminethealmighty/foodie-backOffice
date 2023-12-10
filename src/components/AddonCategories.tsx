@@ -17,14 +17,13 @@ const AddonCategories = ({
   setSelectedAddons,
 }: Props) => {
   return (
-    <Box>
+    <Box sx={{ width: "100%" }}>
       {addonCategories.map((item) => {
         return (
           <Box key={item.id} sx={{ mb: 5 }}>
             <Box
               sx={{
                 display: "flex",
-                width: "300px",
                 justifyContent: "space-between",
               }}
             >

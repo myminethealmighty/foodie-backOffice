@@ -29,6 +29,7 @@ export const fetchAppData = createAsyncThunk(
       const appDataUrl = tableId
         ? `${config.orderApiUrl}/app?tableId=${tableId}`
         : `${config.backofficeApiUrl}/app`;
+      thunkApi.dispatch(setAppLoading(true));
       const response = await fetch(appDataUrl);
       const appData = await response.json();
       const {
@@ -63,6 +64,7 @@ export const fetchAppData = createAsyncThunk(
       thunkApi.dispatch(
         setTheme((localStorage.getItem("theme") as Theme) ?? "light")
       );
+      thunkApi.dispatch(setAppLoading(false));
       onSuccess && onSuccess();
     } catch (err) {
       onError && onError();
@@ -80,8 +82,11 @@ const appSlice = createSlice({
     setTheme: (state, action: PayloadAction<Theme>) => {
       state.theme = action.payload;
     },
+    setAppLoading: (state, action: PayloadAction<boolean>) => {
+      state.isLoading = action.payload;
+    },
   },
 });
 
-export const { setInit, setTheme } = appSlice.actions;
+export const { setInit, setTheme, setAppLoading } = appSlice.actions;
 export default appSlice.reducer;

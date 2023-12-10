@@ -13,13 +13,16 @@ export default async function handler(
 
     const isValid = name && locationId;
     if (!isValid) return res.status(400).send("Bad Request.");
-    const table = await prisma.table.create({
+    let table = await prisma.table.create({
       data: { name, locationId, assetUrl: "" },
     });
     const tableId = table.id;
     await qrCodeImageUpload(tableId);
     const assetUrl = getQrCodeUrl(tableId);
-    await prisma.table.update({ data: { assetUrl }, where: { id: table.id } });
+    table = await prisma.table.update({
+      data: { assetUrl },
+      where: { id: table.id },
+    });
 
     return res.status(200).json({ table });
   } else if (method === "PUT") {

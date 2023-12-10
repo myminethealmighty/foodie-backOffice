@@ -14,6 +14,8 @@ const ActiveOrder = () => {
   const tables = useAppSelector((state) => state.table.items);
   const orders = useAppSelector((state) => state.order.items);
   const orderItems = formatOrders(orders, addons, menus, tables);
+  const tableId = Number(router.query.tableId);
+  const table = tables.find((table) => table.id === tableId);
   const dispatch = useAppDispatch();
   let intervalId: number;
 
@@ -33,14 +35,7 @@ const ActiveOrder = () => {
   if (!orders.length) return null;
 
   return (
-    <Box
-      sx={{
-        zIndex: 5,
-        position: "relative",
-        top: { xs: 50, sm: 150 },
-        px: 3,
-      }}
-    >
+    <Box>
       <Box
         sx={{
           justifyContent: "center",
@@ -48,24 +43,35 @@ const ActiveOrder = () => {
           flexDirection: "column",
           alignItems: "center",
           p: 3,
-          bgcolor: "#e8f6ef",
           borderRadius: 15,
-          mx: 3,
+          position: "relative",
+          top: { xs: 0, md: -220, lg: -280 },
         }}
       >
-        <Typography sx={{ display: "flex" }}>
-          <Typography sx={{ display: { xs: "none", sm: "flex" } }}>
-            OrderSeq:{" "}
-          </Typography>
-          {orderSeq}
+        <Typography
+          sx={{
+            color: { xs: "success.main", md: "info.main" },
+            fontSize: { xs: 20, md: 25 },
+          }}
+        >
+          Table: {table?.name}
         </Typography>
-        <Typography>Total Price: {orders[0].totalPrice}</Typography>
+        <Typography
+          sx={{
+            color: { xs: "success.main", md: "info.main" },
+            fontSize: { xs: 20, md: 25 },
+          }}
+        >
+          Total price: {orders[0].totalPrice}
+        </Typography>
       </Box>
       <Box
         sx={{
           display: "flex",
           flexWrap: "wrap",
-          justifyContent: { xs: "center", sm: "flex-start" },
+          justifyContent: "center",
+          position: "relative",
+          top: { md: -200 },
         }}
       >
         {orderItems.map((orderItem) => {
