@@ -1,8 +1,9 @@
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { fetchAppData } from "@/store/slices/appSlice";
-import { Box, CircularProgress } from "@mui/material";
+import { Box } from "@mui/material";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
+import { GridLoader } from "react-spinners";
 import OrderAppFooter from "./OrderAppFooter";
 import OrderAppHeader from "./OrderAppHeader";
 
@@ -39,10 +40,11 @@ const OrderLayout = ({ children }: Props) => {
               display: "flex",
               justifyContent: "center",
               position: "relative",
-              top: 200,
+              top: 300,
             }}
           >
-            <CircularProgress size={80} />
+            {/* <RingLoader color={"primary.main"} size={100} /> */}
+            <GridLoader color="#1B9C85" size={10} />
           </Box>
         ) : (
           children

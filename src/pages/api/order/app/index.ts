@@ -56,7 +56,7 @@ export default async function handler(
 
     const disabledMenuIds = (
       await prisma.disabledLocationMenu.findMany({
-        where: { menuId: { in: menuIds } },
+        where: { menuId: { in: menuIds }, locationId: location?.id },
       })
     ).map((item) => item.menuId);
 

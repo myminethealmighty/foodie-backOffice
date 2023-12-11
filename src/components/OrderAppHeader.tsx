@@ -37,7 +37,10 @@ const OrderAppHeader = () => {
         </Typography>
         <Box
           sx={{
-            position: "relative",
+            position: "fixed",
+            top: 15,
+            right: { xs: 40, md: 80, lg: 200 },
+            cursor: "pointer",
           }}
         >
           {isCartOrActiveOrderPage ? (

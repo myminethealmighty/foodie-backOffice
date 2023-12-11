@@ -38,14 +38,14 @@ const ActiveOrder = () => {
     <Box>
       <Box
         sx={{
-          justifyContent: "center",
           display: "flex",
+          justifyContent: "center",
+          p: 3,
           flexDirection: "column",
           alignItems: "center",
-          p: 3,
-          borderRadius: 15,
           position: "relative",
-          top: { xs: 0, md: -220, lg: -280 },
+          top: { xs: 0, md: -180, lg: -220 },
+          padding: 0,
         }}
       >
         <Typography
@@ -62,7 +62,7 @@ const ActiveOrder = () => {
             fontSize: { xs: 20, md: 25 },
           }}
         >
-          Total price: {orders[0].totalPrice}
+          Total Price: {orders[0].totalPrice}
         </Typography>
       </Box>
       <Box
@@ -71,7 +71,7 @@ const ActiveOrder = () => {
           flexWrap: "wrap",
           justifyContent: "center",
           position: "relative",
-          top: { md: -200 },
+          top: { md: -140 },
         }}
       >
         {orderItems.map((orderItem) => {

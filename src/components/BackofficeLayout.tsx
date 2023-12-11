@@ -38,7 +38,9 @@ const BackofficeLayout = ({ children }: Props) => {
       <Topbar />
       <Box sx={{ display: "flex", position: "relative", zIndex: 5, flex: 1 }}>
         {session && (
-          <Box sx={{ display: { xs: "none", sm: "block" } }}>
+          <Box
+            sx={{ minHeight: "100vh", display: { xs: "none", sm: "block" } }}
+          >
             <SideBar />
           </Box>
         )}
